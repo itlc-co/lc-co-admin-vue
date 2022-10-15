@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemRoleDeptMapper">
+
+
+    <!--  插入角色部门关联列表数据  -->
+    <insert id="insertRoleDept">
+        INSERT INTO system_role_dept (role_id,dept_id) VALUES
+        <foreach collection="roleDepts" index="index" item="roleDept" separator=",">
+            (#{roleDept.roleId},#{roleDept.deptId})
+        </foreach>
+    </insert>
+
+    <!--  根据角色id列表删除角色部门关联数据  -->
+    <delete id="deleteRoleDepts">
+        DELETE FROM system_role_dept WHERE role_id IN
+        <foreach collection="roleIds" index="index" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <!--  根据角色id删除角色部门角色关联数据  -->
+    <delete id="deleteRoleDeptByRoleId" parameterType="java.lang.Long">
+        DELETE
+        FROM system_role_dept
+        WHERE role_id = #{roleId}
+    </delete>
+
+</mapper>

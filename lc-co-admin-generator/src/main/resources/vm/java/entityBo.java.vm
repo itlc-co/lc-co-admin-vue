@@ -1,0 +1,46 @@
+package ${packageName}.entities.bo;
+
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.*;
+
+import java.io.Serializable;
+
+/**
+ * Description: ${functionName}Bo
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ExcelTarget("${ClassName}Bo")
+public class ${ClassName}Bo implements Serializable {
+
+#set($excludeField=['id','createBy',"updateBy","createTime","updateTime","remark","orderNum","delFlag","status"])
+#set($orderNum=0)
+#foreach ($column in $columns)
+    #set($parentheseIndex=$column.columnComment.indexOf("（"))
+    #if($parentheseIndex != -1)
+        #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+    #else
+        #set($comment=$column.columnComment)
+    #end
+    #if(!$excludeField.contains($column.javaField))
+        /**
+         * $comment
+         *
+         */
+        @Excel(name = "${comment}",orderNum = "$orderNum",width = 30 #if($column.javaType == "LocalDateTime") ,exportFormat = "yyyy-MM-dd HH:mm:ss" #elseif($column.javaType == "LocalDate"),exportFormat = "yyyy-MM-dd" #elseif($column.javaType == "LocalTime") ,exportFormat = "HH:mm:ss" #end)
+        private $column.javaType $column.javaField;
+        #set($orderNum=$orderNum+1)
+    #end
+#end
+}

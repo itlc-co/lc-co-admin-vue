@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemRoleMapper">
+
+    <!--  系统角色结果集映射  -->
+    <resultMap id="systemRoleResultMap" type="org.lc.admin.common.entities.entity.SystemRole">
+        <id column="role_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="role_key" property="roleKey" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="data_scope" property="dataScope" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="menu_check_strictly" property="menuCheckStrictly" jdbcType="TINYINT"
+                javaType="java.lang.Boolean"/>
+        <result column="dept_check_strictly" property="deptCheckStrictly" jdbcType="TINYINT"
+                javaType="java.lang.Boolean"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <!--  系统角色响应结果集映射  -->
+    <resultMap id="systemRoleResponseResultMap" type="org.lc.admin.system.entities.response.SystemRoleResponse"
+               extends="systemRoleResultMap">
+        <result column="is_choose" property="isChoose" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+    </resultMap>
+
+    <!--  系统角色Bo结果集映射  -->
+    <resultMap id="systemRoleBoResultMap" type="org.lc.admin.system.entities.bo.SystemRoleBo">
+        <id column="role_id" property="roleId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="role_key" property="roleKey" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="roleStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="data_scope" property="dataScope" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询系统角色Vo字段  -->
+    <sql id="selectSystemRoleVo">
+        SELECT DISTINCTROW sr.role_id,
+                           sr.role_key,
+                           sr.role_name,
+                           sr.`status`,
+                           sr.order_num,
+                           sr.data_scope,
+                           sr.menu_check_strictly,
+                           sr.dept_check_strictly,
+                           sr.del_flag,
+                           sr.create_by,
+                           sr.create_time,
+                           sr.update_by,
+                           sr.update_time,
+                           sr.remark
+        FROM system_role sr
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+                 LEFT JOIN system_user su ON su.user_id = sur.user_id
+        WHERE sr.del_flag = 0
+    </sql>
+
+    <!--  查询系统角色响应字段  -->
+    <sql id="selectSystemRoleResponse">
+        SELECT DISTINCTROW sr.role_id,
+                           sr.role_key,
+                           sr.role_name,
+                           sr.`status`,
+                           sr.order_num,
+                           sr.data_scope,
+                           sr.menu_check_strictly,
+                           sr.dept_check_strictly,
+                           true is_choose,
+                           sr.del_flag,
+                           sr.create_by,
+                           sr.create_time,
+                           sr.update_by,
+                           sr.update_time,
+                           sr.remark
+        FROM system_role sr
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+                 LEFT JOIN system_user su ON su.user_id = sur.user_id
+        WHERE sr.del_flag = 0
+    </sql>
+
+    <!--  查询系统角色Bo字段  -->
+    <sql id="selectSystemRoleBo">
+        SELECT DISTINCT sr.role_id,
+                        sr.role_key,
+                        sr.role_name,
+                        sr.`status`,
+                        sr.data_scope
+        FROM system_role sr
+    </sql>
+
+    <!--  查询系统角色id字段  -->
+    <sql id="SelectSystemRoleId">
+        SELECT DISTINCTROW sr.role_id
+        FROM system_role sr
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+                 LEFT JOIN system_user su ON su.user_id = sur.user_id
+        WHERE sr.del_flag = 0
+          AND sr.status = 0
+    </sql>
+
+    <!--  查询系统角色字段  -->
+    <sql id="selectSystemRole">
+        SELECT DISTINCT sr.role_id,
+                        sr.role_key,
+                        sr.role_name,
+                        sr.`status`,
+                        sr.order_num,
+                        sr.data_scope,
+                        sr.menu_check_strictly,
+                        sr.dept_check_strictly,
+                        sr.del_flag,
+                        sr.create_by,
+                        sr.create_time,
+                        sr.update_by,
+                        sr.update_time,
+                        sr.remark
+        FROM system_role sr
+        WHERE sr.del_flag = 0
+    </sql>
+
+    <!--  插入角色数据  -->
+    <insert id="insertRole" parameterType="org.lc.admin.common.entities.entity.SystemRole" keyProperty="id"
+            keyColumn="role_id" useGeneratedKeys="true">
+        INSERT INTO system_role (
+        <if test=" id != null and id > 0 ">
+            role_id,
+        </if>
+        <if test=" roleName != null and roleName != '' ">
+            role_name,
+        </if>
+        <if test=" roleKey != null and roleKey != '' ">
+            role_key,
+        </if>
+        <if test=" orderNum != null and orderNum > 0 ">
+            order_num,
+        </if>
+        <if test=" dataScope != null and dataScope != '' ">
+            data_scope,
+        </if>
+        <if test=" menuCheckStrictly != null and (menuCheckStrictly == 0 or menuCheckStrictly == 1) ">
+            menu_check_strictly,
+        </if>
+        <if test=" deptCheckStrictly != null and (deptCheckStrictly == 0 or deptCheckStrictly == 1) ">
+            dept_check_strictly,
+        </if>
+        <if test="status != null and (status == 0 or status == 1)">
+            status,
+        </if>
+        <if test="remark != null and remark != ''">
+            remark,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            create_by,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            update_by,
+        </if>
+        create_time,
+        update_time
+        )
+        VALUES (
+        <if test=" id != null and id > 0 ">
+            #{id},
+        </if>
+        <if test=" roleName != null and roleName != '' ">
+            #{roleName},
+        </if>
+        <if test=" roleKey != null and roleKey != '' ">
+            #{roleKey},
+        </if>
+        <if test=" orderNum != null and orderNum > 0 ">
+            #{orderNum},
+        </if>
+        <if test=" dataScope != null and dataScope != '' ">
+            #{dataScope},
+        </if>
+        <if test=" menuCheckStrictly != null ">
+            #{menuCheckStrictly},
+        </if>
+        <if test=" deptCheckStrictly != null ">
+            #{deptCheckStrictly},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  更新角色数据  -->
+    <update id="updateRole" parameterType="org.lc.admin.common.entities.entity.SystemRole">
+        UPDATE system_role
+        <set>
+            <if test=" roleName != null and roleName != '' ">
+                role_name = #{roleName},
+            </if>
+            <if test=" roleKey != null and roleKey != '' ">
+                role_key = #{roleKey},
+            </if>
+            <if test=" orderNum != null and orderNum > 0 ">
+                order_num = #{orderNum},
+            </if>
+            <if test=" dataScope != null and dataScope >= 0 ">
+                data_scope = #{dataScope},
+            </if>
+            <if test=" menuCheckStrictly != null ">
+                menu_check_strictly = #{menuCheckStrictly},
+            </if>
+            <if test=" deptCheckStrictly != null ">
+                dept_check_strictly = #{deptCheckStrictly},
+            </if>
+            <if test=" status != null and (status == 0 or status == 1) ">
+                status = #{status},
+            </if>
+            <if test=" remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE role_id = #{id}
+    </update>
+
+
+    <!--  根据角色id列表删除角色数据  -->
+    <delete id="deleteRoleByRoleIds">
+        UPDATE system_role SET del_flag = 1 WHERE role_id IN
+        <foreach collection="roleIds" index="index" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <!--  根据角色id删除角色数据  -->
+    <delete id="deleteRoleByRoleId">
+        UPDATE system_role
+        SET del_flag = 1
+        WHERE role_id = #{roleId}
+    </delete>
+
+
+    <!--  根据用户id查询角色权限集合数据  -->
+    <select id="selectRolePermissionsByUserId" resultType="java.lang.String">
+        SELECT DISTINCTROW sr.role_key
+        FROM system_role sr
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+                 LEFT JOIN system_user su ON su.user_id = sur.user_id
+        WHERE sr.del_flag = 0
+          AND sr.status = 0
+          AND su.user_id = #{userId}
+    </select>
+
+    <!--  查询所有角色列表数据  -->
+    <select id="selectRolesAll" resultMap="systemRoleResultMap">
+        <include refid="selectSystemRole"/>
+    </select>
+
+    <!--  根据用户id查询角色id列表数据  -->
+    <select id="selectRoleIdsByUserId" resultType="java.lang.Long">
+        <include refid="SelectSystemRoleId"/>
+        AND su.user_id = #{userId}
+    </select>
+
+    <!--  根据用户id查询角色列表数据  -->
+    <select id="selectRolesResponseByUserId"
+            resultMap="systemRoleResponseResultMap">
+        <include refid="selectSystemRoleResponse"/>
+        AND su.user_id = #{userId}
+    </select>
+
+    <!--  根据用户id查询所有角色数据（已有角色isChoose为true反之为false）  -->
+    <select id="selectAuthRoles" resultMap="systemRoleResponseResultMap">
+        SELECT DISTINCTROW sr.role_id,
+                           sr.role_key,
+                           sr.role_name,
+                           sr.`status`,
+                           sr.order_num,
+                           sr.data_scope,
+                           sr.menu_check_strictly,
+                           sr.dept_check_strictly,
+                           IF(
+                                       sr.role_id IN (SELECT DISTINCT sur.role_id
+                                                      FROM system_user_role sur
+                                                      WHERE sur.role_id = sr.role_id
+                                                        AND sur.user_id = #{userId}),
+                                       TRUE,
+                                       FALSE
+                               ) is_choose,
+                           sr.del_flag,
+                           sr.create_by,
+                           sr.create_time,
+                           sr.update_by,
+                           sr.update_time,
+                           sr.remark
+        FROM system_role sr
+        WHERE sr.del_flag = 0
+          AND sr.STATUS = 0
+    </select>
+
+    <!--  根据角色id查询角色数据  -->
+    <select id="selectRoleById" resultMap="systemRoleResultMap">
+        <include refid="selectSystemRole"/>
+        AND sr.role_id = #{roleId}
+    </select>
+
+    <!--  查询角色列表数据  -->
+    <select id="selectRoleList" resultMap="systemRoleResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemRoleRequest">
+        <include refid="selectSystemRole"/>
+        <if test="roleId != null and roleId > 0">
+            AND sr.role_id = #{roleId}
+        </if>
+        <if test="roleName != null and roleName != ''">
+            AND sr.role_name LIKE CONCAT('%',#{roleName},'%')
+        </if>
+        <if test="roleKey != null and roleKey != ''">
+            AND sr.role_key LIKE CONCAT('%',#{roleKey},'%')
+        </if>
+        <if test="status != null and (status == 0 or status == 1)">
+            AND sr.status = #{status}
+        </if>
+        <if test="params.startTime!=null and params.startTime != ''">
+            <!-- 开始时间检索 -->
+            AND DATE_FORMAT(sr.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+        </if>
+        <if test="params.endTime!=null and params.endTime != ''">
+            <!-- 结束时间检索 -->
+            AND DATE_FORMAT(sr.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+        </if>
+        ORDER BY sr.order_num
+    </select>
+
+    <!--  根据角色名称查询角色数据  -->
+    <select id="selectRoleByRoleName" resultMap="systemRoleResultMap">
+        <include refid="selectSystemRole"/>
+        AND role_name = #{roleName} LIMIT 1
+    </select>
+
+    <!--  根据角色键查询角色数据  -->
+    <select id="selectRoleByRoleKey" resultMap="systemRoleResultMap">
+        <include refid="selectSystemRole"/>
+        AND role_key = #{roleKey} LIMIT 1
+    </select>
+
+    <!--  查询系统角色Bo列表数据 -->
+    <select id="selectRoleBoList" resultMap="systemRoleBoResultMap">
+        <include refid="selectSystemRoleBo"/>
+        <if test="roleId != null and roleId > 0">
+            AND sr.role_id = #{roleId}
+        </if>
+        <if test="roleName != null and roleName != ''">
+            AND sr.role_name LIKE CONCAT('%',#{roleName},'%')
+        </if>
+        <if test="roleKey != null and roleKey != ''">
+            AND sr.role_key LIKE CONCAT('%',#{roleKey},'%')
+        </if>
+        <if test="status != null and (status == 0 or status == 1)">
+            AND sr.status = #{status}
+        </if>
+        <if test="params.startTime!=null and params.startTime != ''">
+            <!-- 开始时间检索 -->
+            AND DATE_FORMAT(sr.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+        </if>
+        <if test="params.endTime!=null and params.endTime != ''">
+            <!-- 结束时间检索 -->
+            AND DATE_FORMAT(sr.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+        </if>
+        ORDER BY sr.order_num
+    </select>
+
+    <!--  根据用户名称查询角色名称集合  -->
+    <select id="selectRoleNamesByUserName" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT DISTINCT sr.role_name
+        FROM system_role sr
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+                 LEFT JOIN system_user su ON sur.user_id = su.user_id
+        WHERE sr.del_flag = 0
+          AND sr.`status` = 0
+          AND su.`status` = 0
+          AND su.user_name = #{userName}
+    </select>
+
+
+</mapper>

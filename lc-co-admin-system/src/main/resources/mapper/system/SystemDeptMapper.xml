@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemDeptMapper">
+
+    <!--  系统部门字段结果集映射  -->
+    <resultMap id="systemDeptResultMap" type="org.lc.admin.common.entities.entity.SystemDept">
+        <id column="dept_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="ancestors" property="ancestors" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dept_name" property="deptName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="leader" property="leader" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!--  查询系统部门字段  -->
+    <sql id="selectSystemDept">
+        SELECT sd.dept_id,
+               sd.parent_id,
+               sd.ancestors,
+               sd.dept_name,
+               sd.order_num,
+               sd.leader,
+               sd.phone,
+               sd.email,
+               sd.`status`,
+               sd.del_flag,
+               sd.create_by,
+               sd.create_time,
+               sd.update_by,
+               sd.update_time
+        FROM system_dept sd
+    </sql>
+
+    <!--  插入部门数据  -->
+    <insert id="insertDept" parameterType="org.lc.admin.common.entities.entity.SystemDept" keyColumn="dept_id"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO system_dept (
+        <if test="id != null and id > 0">
+            dept_id,
+        </if>
+        <if test="deptName != null and deptName != ''">
+            dept_name,
+        </if>
+        <if test="parentId != null and parentId > 0">
+            parent_id,
+        </if>
+        <if test="ancestors != null and ancestors != ''">
+            ancestors,
+        </if>
+        <if test="leader != null and leader != ''">
+            leader,
+        </if>
+        <if test="email != null and email != ''">
+            email,
+        </if>
+        <if test="phone != null and phone != ''">
+            phone,
+        </if>
+        <if test="orderNum != null and orderNum > 0">
+            order_num,
+        </if>
+        <if test="status != null and (status == 0 or status == 1)">
+            status,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            create_by,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            update_by,
+        </if>
+        del_flag,
+        create_time,
+        update_time)
+        VALUES (
+        <if test="id != null and id > 0">
+            #{id},
+        </if>
+        <if test="deptName != null and deptName != ''">
+            #{deptName},
+        </if>
+        <if test="parentId != null and parentId > 0">
+            #{parentId},
+        </if>
+        <if test="ancestors != null and ancestors != ''">
+            #{ancestors},
+        </if>
+        <if test="leader != null and leader != ''">
+            #{leader},
+        </if>
+        <if test="email != null and email != ''">
+            #{email},
+        </if>
+        <if test="phone != null and phone != ''">
+            #{phone},
+        </if>
+        <if test="orderNum != null and orderNum > 0">
+            #{orderNum},
+        </if>
+        <if test="status != null and (status == 0 or status == 1)">
+            #{status},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            #{updateBy},
+        </if>
+        0,
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--   更新子部门祖级列表 -->
+    <update id="updateChildrenDeptAncestors">
+        UPDATE system_dept
+        SET ancestors = REPLACE(ancestors, #{oldAncestors}, #{newAncestors})
+        WHERE del_flag = 0
+          AND parent_id = #{parentId}
+    </update>
+
+    <!--  修改系统部门实体信息  -->
+    <update id="updateDept">
+        UPDATE system_dept
+        <set>
+            <if test="deptName != null and deptName != ''">
+                dept_name = #{deptName},
+            </if>
+            <if test="parentId != null and parentId > 0">
+                parent_id = #{parentId},
+            </if>
+            <if test="ancestors != null and ancestors != ''">
+                ancestors = #{ancestors},
+            </if>
+            <if test="leader != null and leader != ''">
+                leader = #{leader},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="orderNum != null and orderNum > 0">
+                order_num = #{orderNum},
+            </if>
+            <if test="status != null and (status == 0 or status == 1)">
+                status = #{status},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            update_time= now()
+        </set>
+        WHERE dept_id = #{id}
+    </update>
+
+    <!--  根据部门id列表更新部门正常状态  -->
+    <update id="updateDeptStatusNormal">
+        UPDATE system_dept SET status = 0 WHERE dept_id IN
+        <foreach collection="deptIds" item="deptId" index="index" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </update>
+
+    <!--  根据部门id删除部门数据  -->
+    <delete id="deleteDeptById">
+        UPDATE system_dept
+        SET del_flag = 1
+        WHERE dept_id = #{deptId}
+    </delete>
+
+    <!--  根据部门id列表删除部门数据  -->
+    <delete id="deleteDeptByIds">
+        UPDATE system_dept
+        SET del_flag = 1
+        WHERE dept_id IN
+        <foreach collection="deptIds" index="index" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </delete>
+
+    <!--  查询部门列表数据  -->
+    <select id="selectDeptList" resultMap="systemDeptResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemDeptRequest">
+        <include refid="selectSystemDept"/>
+        <where>
+            sd.del_flag = 0
+            <if test="deptId != null and deptId > 0">
+                AND sd.dept_id = #{deptId}
+            </if>
+            <if test="deptName != null and deptName != ''">
+                AND sd.dept_name LIKE CONCAT('%', #{deptName}, '%')
+            </if>
+            <if test="parentId != null and parentId != 0">
+                AND sd.parent_id = #{parentId}
+            </if>
+            <if test="status != null and (status == 0 or status == 1)">
+                AND sd.`status` = #{status}
+            </if>
+        </where>
+        ORDER BY sd.parent_id,sd.order_num
+    </select>
+
+    <!--  根据部门id查询部门数据  -->
+    <select id="selectDeptById" resultMap="systemDeptResultMap">
+        <include refid="selectSystemDept"/>
+        WHERE sd.del_flag = 0
+        AND sd.dept_id = #{deptId}
+    </select>
+
+    <!-- 查询排除指定部门id的部门及其父子部门的部门列表数据  -->
+    <select id="selectDeptListExcludeById" resultMap="systemDeptResultMap">
+        <include refid="selectSystemDept"/>
+        WHERE sd.del_flag = 0
+        AND sd.dept_id != #{deptId}
+        AND LOCATE(#{deptId},sd.ancestors) = 0
+        ORDER BY
+        sd.parent_id,
+        sd.order_num
+    </select>
+
+    <!--  根据父部门id与当前部门名称查询部门数量  -->
+    <select id="selectUniqueDeptId" resultType="java.lang.Long">
+        SELECT sd.dept_id
+        FROM system_dept sd
+        WHERE sd.del_flag = 0
+          AND sd.parent_id = #{parentId}
+          AND sd.dept_name = #{deptName}
+        LIMIT 1
+    </select>
+
+    <!--  通过部门id查询系统部门状态  -->
+    <select id="selectDeptStatusById" resultType="java.lang.Integer">
+        SELECT IFNULL(sd.status, 0)
+        FROM system_dept sd
+        WHERE sd.del_flag = 0
+          AND sd.dept_id = #{deptId}
+    </select>
+
+    <!--  查询部门祖级链  -->
+    <select id="selectDeptAncestorsById" resultType="java.lang.String">
+        SELECT sd.ancestors
+        FROM system_dept sd
+        WHERE sd.del_flag = 0
+          AND sd.dept_id = #{deptId}
+        LIMIT 1
+    </select>
+
+    <!-- 通过部门id查询部门下正常状态下的子部门的数量  -->
+    <select id="selectCntNormalChildrenDeptById" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM system_dept sd
+        WHERE sd.del_flag = 0
+          AND FIND_IN_SET(#{deptId}, sd.ancestors)
+          AND sd.`status` = 0
+    </select>
+
+    <!--  根据部门id查询子部门数量 限制最多为1 -->
+    <select id="selectCntChildDeptById" resultType="java.lang.Long">
+        SELECT COUNT(1)
+        FROM system_dept
+        WHERE del_flag = 0
+          AND parent_id = #{deptId}
+        LIMIT 1
+    </select>
+
+    <!--  根据角色数据查询部门id列表数据  -->
+    <select id="selectDeptIdsByRole" resultType="java.lang.Long">
+        SELECT
+        sd.dept_id
+        FROM
+        system_dept sd
+        LEFT JOIN system_role_dept srd ON srd.dept_id = sd.dept_id
+        <where>
+            sd.del_flag = 0
+            AND srd.role_id = #{id}
+            <if test=" deptCheckStrictly!=null and deptCheckStrictly">
+                AND sd.dept_id NOT IN (SELECT sd.parent_id FROM system_dept sd INNER JOIN system_role_dept srd ON
+                srd.dept_id = sd.dept_id AND srd.role_id = #{id})
+            </if>
+        </where>
+        ORDER BY
+        sd.parent_id,
+        sd.order_num
+    </select>
+
+
+</mapper>

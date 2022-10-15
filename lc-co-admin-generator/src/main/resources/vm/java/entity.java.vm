@@ -1,0 +1,46 @@
+package ${packageName}.entities.entity;
+
+import lombok.*;
+import lombok.experimental.Accessors;
+import org.lc.admin.common.base.entities.entity.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.*;
+
+
+/**
+ * Description: ${functionName}
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Accessors(chain = true)
+public class ${ClassName} extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+#set($excludeField=['id','createBy',"updateBy","createTime","updateTime","remark","orderNum","delFlag","status"])
+
+#foreach ($column in $columns)
+    #if(!$excludeField.contains($column.javaField))
+    /**
+     * $column.columnComment
+     */
+    #if($column.javaType == "LocalDateTime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    #elseif($column.javaType == "LocalDate")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    #elseif($column.javaType == "LocalTime")
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    #else
+    #end
+    private $column.javaType $column.javaField;
+    #end
+#end
+
+}

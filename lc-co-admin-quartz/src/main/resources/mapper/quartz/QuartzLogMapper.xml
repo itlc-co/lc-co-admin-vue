@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.quartz.mapper.QuartzJobLogMapper">
+
+    <!--  任务日志结果集映射  -->
+    <resultMap id="quartzJobLogResultMap" type="org.lc.admin.quartz.entities.entity.QuartzJobLog">
+        <id column="job_log_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_group" property="jobGroup" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_invoke_target" property="jobInvokeTarget" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_message" property="jobMessage" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_run_time" property="jobRunTime" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <!--  任务日志bo结果集映射  -->
+    <resultMap id="quartzJobLogBoResultMap" type="org.lc.admin.quartz.entities.bo.QuartzJobLogBo">
+        <id column="job_log_id" property="jobLogId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_group" property="jobGroup" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_invoke_target" property="jobInvokeTarget" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_message" property="jobMessage" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_run_time" property="jobRunTime" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询任务日志字段  -->
+    <sql id="selectQuartzJobLog">
+        SELECT job_log_id,
+               job_name,
+               job_group,
+               job_invoke_target,
+               job_message,
+               job_run_time,
+               status,
+               create_time
+        FROM quartz_job_log
+    </sql>
+
+    <!--  查询任务日志bo字段  -->
+    <sql id="selectQuartzJobLogBo">
+        SELECT job_log_id,
+               job_name,
+               job_group,
+               job_invoke_target,
+               job_message,
+               job_run_time,
+               status
+        FROM quartz_job_log
+    </sql>
+
+    <!--  根据任务日志插入任务日志数据  -->
+    <insert id="insertQuartzJobLog" useGeneratedKeys="true" keyColumn="job_log_id">
+        INSERT INTO quartz_job_log (
+        <if test=" id != null and id != 0 ">
+            job_log_id,
+        </if>
+        <if test=" jobName != null and jobName != '' ">
+            job_name,
+        </if>
+        <if test=" jobGroup != null and jobGroup != '' ">
+            job_group,
+        </if>
+        <if test=" jobInvokeTarget != null and jobInvokeTarget != '' ">
+            job_invoke_target,
+        </if>
+        <if test=" jobMessage != null and jobMessage != '' ">
+            job_message,
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            status,
+        </if>
+        <if test=" jobRunTime != null and ( jobRunTime >= 0 ) ">
+            job_run_time,
+        </if>
+        create_time
+        )
+        VALUES (
+        <if test=" id != null and id != 0 ">
+            #{id},
+        </if>
+        <if test=" jobName != null and jobName != '' ">
+            #{jobName},
+        </if>
+        <if test=" jobGroup != null and jobGroup != '' ">
+            #{jobGroup},
+        </if>
+        <if test=" jobInvokeTarget != null and jobInvokeTarget != '' ">
+            #{jobInvokeTarget},
+        </if>
+        <if test=" jobMessage != null and jobMessage != '' ">
+            #{jobMessage},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test=" jobRunTime != null and ( jobRunTime >= 0 ) ">
+            #{jobRunTime},
+        </if>
+        NOW()
+        )
+    </insert>
+
+    <!--  根据任务日志id列表删除任务日志列表数据  -->
+    <delete id="deleteQuartzJobLogByIds">
+        DELETE FROM quartz_job_log WHERE job_log_id IN
+        <foreach collection="jobLogIds" index="index" item="jobLogId" open="(" separator="," close=")">
+            #{jobLogId}
+        </foreach>
+    </delete>
+
+    <!--  清空任务日志数据接口  -->
+    <delete id="cleanQuartJobLog">
+        TRUNCATE TABLE quartz_job_log
+    </delete>
+
+    <!--  根据任务日志id删除任务日志数据  -->
+    <delete id="deleteQuartzJobLogById">
+        DELETE
+        FROM quartz_job_log
+        WHERE job_log_id = #{jobLogId}
+    </delete>
+
+    <!--  根据请求参数查询任务日志列表数据  -->
+    <select id="selectQuartzJobLogList" resultMap="quartzJobLogResultMap">
+        <include refid="selectQuartzJobLog"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" jobName != null and jobName != '' ">
+                    AND job_name LIKE CONCAT('%', #{jobName}, '%')
+                </if>
+                <if test=" jobGroup != null and jobGroup != '' ">
+                    AND job_group = #{jobGroup}
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND status = #{status}
+                </if>
+                <if test=" jobInvokeTarget != null and jobInvokeTarget != '' ">
+                    AND job_invoke_target LIKE CONCAT('%', #{jobInvokeTarget}, '%')
+                </if>
+                <if test=" params.startTime!=null and params.startTime != '' ">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test=" params.endTime!=null and params.endTime != '' ">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据任务日志id查询任务日志数据  -->
+    <select id="selectQuartzJobLogById" resultMap="quartzJobLogResultMap">
+        <include refid="selectQuartzJobLog"/>
+        WHERE job_log_id = #{jobLogId}
+    </select>
+
+    <!--  根据请求参数查询任务日志bo列表数据  -->
+    <select id="selectQuartzJobLogBoList" resultMap="quartzJobLogBoResultMap">
+        <include refid="selectQuartzJobLogBo"/>
+    </select>
+
+</mapper>

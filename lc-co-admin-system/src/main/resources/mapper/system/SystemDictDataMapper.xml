@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemDictDataMapper">
+
+    <!--  系统字典数据结果集映射  -->
+    <resultMap id="systemDictDataResultMap" type="org.lc.admin.system.entities.entity.SystemDictData">
+        <id column="data_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="dict_sort" property="dictSort" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="dict_label" property="dictLabel" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_value" property="dictValue" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_module" property="dictModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="css_class" property="cssClass" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="list_class" property="listClass" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_default" property="isDefault" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <!--  字典数据bo结果集映射  -->
+    <resultMap id="systemDictDataBoResultMap" type="org.lc.admin.system.entities.bo.SystemDictDataBo">
+        <id column="data_id" property="dataId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="dict_label" property="dictLabel" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_value" property="dictValue" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_module" property="dictModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="css_class" property="cssClass" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="list_class" property="listClass" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_default" property="isDefault" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="status" property="dataStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询系统字典数据字段  -->
+    <sql id="selectSystemDictData">
+        SELECT sdd.data_id,
+               sdd.dict_sort,
+               sdd.dict_label,
+               sdd.dict_value,
+               sdd.dict_type,
+               (SELECT sdt.dict_module FROM system_dict_type sdt WHERE sdt.dict_type = sdd.dict_type) dict_module,
+               sdd.css_class,
+               sdd.list_class,
+               sdd.is_default,
+               sdd.`status`,
+               sdd.create_by,
+               sdd.create_time,
+               sdd.update_by,
+               sdd.update_time,
+               remark
+        FROM system_dict_data sdd
+    </sql>
+
+    <!--  查询字典数据bo字段  -->
+    <sql id="selectSystemDictDataBo">
+        SELECT sdd.data_id,
+               sdd.dict_sort,
+               sdd.dict_label,
+               sdd.dict_value,
+               sdd.dict_type,
+               (SELECT sdt.dict_module FROM system_dict_type sdt WHERE sdt.dict_type = sdd.dict_type) dict_module,
+               sdd.css_class,
+               sdd.list_class,
+               sdd.is_default,
+               sdd.`status`
+        FROM system_dict_data sdd
+    </sql>
+
+    <!--  插入字典数据  -->
+    <insert id="insertDictData" parameterType="org.lc.admin.system.entities.entity.SystemDictData">
+        INSERT INTO system_dict_data (
+        <if test=" dictSort != null and dictSort > 0 ">
+            dict_sort,
+        </if>
+        <if test=" dictLabel != null and dictLabel != '' ">
+            dict_label,
+        </if>
+        <if test=" dictValue != null and dictValue != '' ">
+            dict_value,
+        </if>
+        <if test=" dictType != null and dictType != '' ">
+            dict_type,
+        </if>
+        <if test=" cssClass != null and cssClass != '' ">
+            css_class,
+        </if>
+        <if test=" listClass != null and listClass != '' ">
+            list_class,
+        </if>
+        <if test=" isDefault != null and isDefault != '' ">
+            is_default,
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            status,
+        </if>
+        <if test="remark != null and remark != ''">
+            remark,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            create_by,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            update_by,
+        </if>
+        create_time,
+        update_time
+        ) VALUES (
+        <if test=" dictSort != null and dictSort > 0 ">
+            #{dictSort},
+        </if>
+        <if test=" dictLabel != null and dictLabel != '' ">
+            #{dictLabel},
+        </if>
+        <if test=" dictValue != null and dictValue != '' ">
+            #{dictValue},
+        </if>
+        <if test=" dictType != null and dictType != '' ">
+            #{dictType},
+        </if>
+        <if test=" cssClass != null and cssClass != '' ">
+            #{cssClass},
+        </if>
+        <if test=" listClass != null and listClass != '' ">
+            #{listClass},
+        </if>
+        <if test=" isDefault != null and isDefault != '' ">
+            #{isDefault},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test="remark != null and remark != ''">
+            #{remark},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            #{updateBy},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  更新数据字典类型名称  -->
+    <update id="updateDictDataDictType">
+        UPDATE system_dict_data
+        SET dict_type = #{newDictType}
+        WHERE dict_type = #{oldDictType}
+    </update>
+
+    <!--  更新字典数据  -->
+    <update id="updateDictData" parameterType="org.lc.admin.system.entities.entity.SystemDictData">
+        UPDATE system_dict_data
+        <set>
+            <if test=" dictSort != null and dictSort > 0 ">
+                dict_sort = #{dictSort},
+            </if>
+            <if test=" dictLabel != null and dictLabel != '' ">
+                dict_label = #{dictLabel},
+            </if>
+            <if test=" dictValue != null and dictValue != '' ">
+                dict_value = #{dictValue},
+            </if>
+            <if test=" dictType != null and dictType != '' ">
+                dict_type = #{dictType},
+            </if>
+            <if test=" cssClass != null and cssClass != '' ">
+                css_class = #{cssClass},
+            </if>
+            <if test=" listClass != null and listClass != '' ">
+                list_class = #{listClass},
+            </if>
+            <if test=" isDefault != null and isDefault != '' ">
+                is_default = #{isDefault},
+            </if>
+            <if test=" status != null and ( status == 0 or status == 1 ) ">
+                status = #{status},
+            </if>
+            <if test=" remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE data_id = #{id}
+    </update>
+
+    <!--  根据字典数据id删除字典数据  -->
+    <delete id="deleteDictDataByDataId" parameterType="java.lang.Long">
+        DELETE
+        FROM system_dict_data
+        WHERE data_id = #{dataId}
+    </delete>
+
+    <!--  根据数据id列表删除字典数据  -->
+    <delete id="deleteDictDataByDataIds" parameterType="list">
+        DELETE
+        FROM system_dict_data
+        WHERE data_id IN
+        <foreach collection="dataIds" index="index" item="dataId" open="(" separator="," close=")">
+            #{dataId}
+        </foreach>
+    </delete>
+
+    <!--  根据字典类型查询字典数据列表 -->
+    <select id="selectDictDataByDictType" resultMap="systemDictDataResultMap">
+        <include refid="selectSystemDictData"/>
+        WHERE
+        sdd.`status` = 0
+        AND sdd.dict_type = #{dictType}
+        ORDER BY
+        sdd.dict_sort ASC
+    </select>
+
+    <!--  根据字典类型查询字典数据数量  -->
+    <select id="selectCntDictDataByDictType" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM system_dict_data
+        WHERE dict_type = #{dictType}
+    </select>
+
+    <!--  查询字典数据列表数据  -->
+    <select id="selectDictDataList" resultMap="systemDictDataResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemDictDataRequest">
+        <include refid="selectSystemDictData"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" dictType != null and dictType != '' ">
+                    AND dict_type = #{dictType}
+                </if>
+                <if test=" dictLabel != null and dictLabel != '' ">
+                    AND dict_label LIKE CONCAT('%', #{dictLabel}, '%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND status = #{status}
+                </if>
+            </trim>
+            <if test=" dictModule != null and dictModule != '' ">
+                HAVING dict_module LIKE CONCAT('%', #{dictModule}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--  根据字典数据id查询字典数据  -->
+    <select id="selectDictDataByDataId" resultMap="systemDictDataResultMap">
+        <include refid="selectSystemDictData"/>
+        WHERE sdd.data_id = #{dataId}
+    </select>
+
+    <!--  根据字典类型与字典值查询字典数据  -->
+    <select id="selectDictDataByDictTypeAndDictValue" resultMap="systemDictDataResultMap">
+        <include refid="selectSystemDictData"/>
+        WHERE sdd.dict_value = #{dictValue}
+        AND sdd.dict_type = #{dictType}
+    </select>
+
+    <!--  查询字典数据bo列表数据  -->
+    <select id="selectDictDataBoList" resultMap="systemDictDataBoResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemDictDataRequest">
+        <include refid="selectSystemDictDataBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" dictType != null and dictType != '' ">
+                    AND dict_type = #{dictType}
+                </if>
+                <if test=" dictLabel != null and dictLabel != '' ">
+                    AND dict_label LIKE CONCAT('%', #{dictLabel}, '%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND status = #{status}
+                </if>
+            </trim>
+            <if test=" dictModule != null and dictModule != '' ">
+                HAVING dict_module LIKE CONCAT('%', #{dictModule}, '%')
+            </if>
+        </where>
+        ORDER BY
+        sdd.dict_sort ASC
+    </select>
+
+    <!--  根据字典类型查询字典模块名称  -->
+    <select id="selectDictModuleByDictType" resultType="java.lang.String">
+        SELECT DISTINCT (SELECT sdt.dict_module
+                         FROM system_dict_type sdt
+                         WHERE sdt.dict_type = sdd.dict_type) dict_module
+        FROM system_dict_data sdd
+        WHERE sdd.dict_type = #{dictType}
+        LIMIT 1
+    </select>
+
+
+</mapper>

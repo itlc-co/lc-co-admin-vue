@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemDictTypeMapper">
+
+    <!--  系统字典类型结果集映射  -->
+    <resultMap id="systemDictTypeResultMap" type="org.lc.admin.system.entities.entity.SystemDictType">
+        <id column="dict_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="dict_name" property="dictName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_module" property="dictModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <!--  系统字典类型Bo结果集映射  -->
+    <resultMap id="systemDictTypeBoResultMap" type="org.lc.admin.system.entities.bo.SystemDictTypeBo">
+        <id column="dict_id" property="dictId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="dict_name" property="dictName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_module" property="dictModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="dictStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询系统字典类型字段  -->
+    <sql id="selectSystemDictType">
+        SELECT DISTINCT dict_id,
+                        dict_name,
+                        dict_type,
+                        dict_module,
+                        status,
+                        create_by,
+                        create_time,
+                        update_by,
+                        update_time,
+                        remark
+        FROM system_dict_type sdt
+    </sql>
+
+    <!--  查询系统字典类型Bo字段  -->
+    <sql id="selectSystemDictTypeBo">
+        SELECT DISTINCT dict_id,
+                        dict_name,
+                        dict_type,
+                        dict_module,
+                        status
+        FROM system_dict_type sdt
+    </sql>
+
+    <!--  插入字典类型数据  -->
+    <insert id="insertDictType">
+        INSERT INTO system_dict_type (
+        <if test=" dictName != null and dictName != '' ">
+            dict_name,
+        </if>
+        <if test=" dictType != null and dictType != '' ">
+            dict_type,
+        </if>
+        <if test=" dictModule != null and dictModule != '' ">
+            dict_module,
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            status,
+        </if>
+        <if test=" remark != null and remark != '' ">
+            remark,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        create_time,
+        update_time
+        )
+        VALUES (
+        <if test=" dictName != null and dictName != '' ">
+            #{dictName},
+        </if>
+        <if test=" dictType != null and dictType != '' ">
+            #{dictType},
+        </if>
+        <if test=" dictModule != null and dictModule != '' ">
+            #{dictModule},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  更新字典类型数据  -->
+    <update id="updateDictType" parameterType="org.lc.admin.system.entities.request.SystemDictTypeRequest">
+        UPDATE system_dict_type
+        <set>
+            <if test=" dictName != null and dictName != '' ">
+                dict_name = #{dictName},
+            </if>
+            <if test=" dictType != null and dictType != '' ">
+                dict_type = #{dictType},
+            </if>
+            <if test=" dictModule != null and dictModule != '' ">
+                dict_module = #{dictModule},
+            </if>
+            <if test=" status != null and ( status == 0 or status == 1 ) ">
+                `status` = #{status},
+            </if>
+            <if test=" remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE dict_id = #{id}
+    </update>
+
+    <!--  根据字典id删除字典类型数据  -->
+    <delete id="deleteDictTypeById" parameterType="java.lang.Long">
+        DELETE
+        FROM system_dict_type
+        WHERE dict_id = #{dictId}
+    </delete>
+
+    <!--  根据字典id列表删除字典类型数据  -->
+    <delete id="deleteDictTypeByIds">
+        DELETE
+        FROM system_dict_type
+        WHERE dict_id IN
+        <foreach collection="dictIds" index="index" item="dictId" open="(" separator="," close=")">
+            #{dictId}
+        </foreach>
+    </delete>
+
+    <!--  查询字典类型列表数据  -->
+    <select id="selectDictTypeList" resultMap="systemDictTypeResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemDictTypeRequest">
+        <include refid="selectSystemDictType"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" dictName != null  and dictName != '' ">
+                    AND sdt.dict_name LIKE CONCAT('%',#{dictName},'%')
+                </if>
+                <if test=" dictType != null  and dictType != '' ">
+                    AND sdt.dict_type LIKE CONCAT('%',#{dictType},'%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND sdt.status = #{status}
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(sdt.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(sdt.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据字典id查询字典类型数据  -->
+    <select id="selectDictTypeById" resultMap="systemDictTypeResultMap">
+        <include refid="selectSystemDictType"/>
+        WHERE dict_id = #{dictId}
+    </select>
+
+    <!--  根据字典类型名称查询字典类型数据  -->
+    <select id="selectDictTypeByTypeName" resultMap="systemDictTypeResultMap">
+        <include refid="selectSystemDictType"/>
+        WHERE dict_type = #{dictType} LIMIT 1
+    </select>
+
+    <!--  查询所有字典类型数据  -->
+    <select id="selectDictTypeAll" resultMap="systemDictTypeResultMap">
+        <include refid="selectSystemDictType"/>
+    </select>
+
+    <!--  查询字典类型Bo列表数据  -->
+    <select id="selectDictTypeBoList" resultMap="systemDictTypeBoResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemDictTypeRequest">
+        <include refid="selectSystemDictTypeBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" dictName != null  and dictName != '' ">
+                    AND sdt.dict_name LIKE CONCAT('%',#{dictName},'%')
+                </if>
+                <if test=" dictType != null  and dictType != '' ">
+                    AND sdt.dict_type LIKE CONCAT('%',#{dictType},'%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND sdt.status = #{status}
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(sdt.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(sdt.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+
+</mapper>

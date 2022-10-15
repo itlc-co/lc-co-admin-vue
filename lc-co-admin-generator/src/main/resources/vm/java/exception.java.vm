@@ -1,0 +1,63 @@
+package ${packageName}.exec;
+
+import cn.hutool.core.util.EnumUtil;
+import org.lc.admin.common.base.entities.enums.StatusMsg;
+import org.lc.admin.common.base.exec.BaseException;
+
+/**
+ * Description: ${functionName}异常
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+public class ${ClassName}Exception extends BaseException {
+
+    /**
+     * 模块名
+     */
+    private static final String MODULE_NAME = "${functionName}";
+
+    /**
+     * 异常状态消息
+     */
+    public static final StatusMsg ${tableName.toUpperCase()}_ERROR = EnumUtil.fromString(StatusMsg.class,"${tableName.toUpperCase()}_ERROR",StatusMsg.SERVICE_ERROR);
+
+
+    /**
+     * 序列号
+     */
+    private static final long serialVersionUID = 1L;
+
+
+    public ${ClassName}Exception(String msg, Object... args) {
+        super(MODULE_NAME, ${tableName.toUpperCase()}_ERROR.getCode(), msg, args);
+    }
+
+    public ${ClassName}Exception(Integer code, String msg, Object... args) {
+        super(MODULE_NAME, code, msg, args);
+    }
+
+    public ${ClassName}Exception(String msg, Throwable throwable, Object... args) {
+        super(MODULE_NAME, ${tableName.toUpperCase()}_ERROR.getCode(), msg, args, throwable);
+    }
+
+    public ${ClassName}Exception(Integer code, String msg) {
+        this(code, msg, (Object) null);
+    }
+
+
+    public ${ClassName}Exception(StatusMsg statusMsg) {
+        super(MODULE_NAME, statusMsg, null);
+    }
+
+    public ${ClassName}Exception(StatusMsg statusMsg, Object... args) {
+        super(MODULE_NAME, statusMsg, args);
+    }
+
+    public ${ClassName}Exception() {
+        super(MODULE_NAME, ${tableName.toUpperCase()}_ERROR, null);
+    }
+
+}
+

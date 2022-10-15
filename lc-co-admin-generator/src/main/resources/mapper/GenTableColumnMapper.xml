@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.generator.mapper.GenTableColumnMapper">
+
+    <!--  生成器表列结果集映射  -->
+    <resultMap id="genTableColumnResultMap" type="org.lc.admin.generator.entities.entity.GenTableColumn">
+        <result column="column_id" property="columnId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="table_id" property="tableId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="field_alias" property="fieldAlias" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="column_name" property="columnName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="column_comment" property="columnComment" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="column_type" property="columnType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="java_type" property="javaType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="java_field" property="javaField" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_pk" property="isPk" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_increment" property="isIncrement" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_required" property="isRequired" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_insert" property="isInsert" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_edit" property="isEdit" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_list" property="isList" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_query" property="isQuery" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="query_type" property="queryType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="html_type" property="htmlType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--  查询生成器表列字段  -->
+    <sql id="selectGenTableColumn">
+        SELECT column_id,
+               table_id,
+               column_name,
+               field_alias,
+               column_comment,
+               column_type,
+               java_type,
+               java_field,
+               is_pk,
+               is_increment,
+               is_required,
+               is_insert,
+               is_edit,
+               is_list,
+               is_query,
+               query_type,
+               html_type,
+               dict_type,
+               sort,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        FROM gen_table_column
+    </sql>
+
+    <!--  根据生成器表列字段插入生成器表列字段数据  -->
+    <insert id="insertGenTableColumn" parameterType="org.lc.admin.generator.entities.entity.GenTableColumn"
+            keyProperty="columnId" useGeneratedKeys="true" keyColumn="column_id">
+        INSERT INTO gen_table_column (
+        <if test=" tableId != null and tableId > 0 ">
+            table_id,
+        </if>
+        <if test=" fieldAlias != null and fieldAlias != '' ">
+            field_alias,
+        </if>
+        <if test=" columnName != null and columnName != '' ">
+            column_name,
+        </if>
+        <if test=" columnComment != null and columnComment != '' ">
+            column_comment,
+        </if>
+        <if test=" columnType != null and columnType != ''  ">
+            column_type,
+        </if>
+        <if test=" javaType != null and javaType != '' ">
+            java_type,
+        </if>
+        <if test=" javaField != null  and javaField != '' ">
+            java_field,
+        </if>
+        <if test=" isPk != null and ( isPk == '1' or isPk == '0' ) ">
+            is_pk,
+        </if>
+        <if test=" isIncrement != null and ( isIncrement == '1' or isIncrement == '0' ) ">
+            is_increment,
+        </if>
+        <if test=" isRequired != null and ( isRequired == '1' or isRequired == '0' ) ">
+            is_required,
+        </if>
+        <if test=" isInsert != null and ( isInsert == '1' or isInsert == '0' ) ">
+            is_insert,
+        </if>
+        <if test=" isEdit != null and ( isEdit == '1' or isEdit == '0' ) ">
+            is_edit,
+        </if>
+        <if test=" isList != null and ( isList == '1' or isList == '0' ) ">
+            is_list,
+        </if>
+        <if test=" isQuery != null and ( isQuery == '1' or isQuery == '0' ) ">
+            is_query,
+        </if>
+        <if test=" queryType != null and queryType != '' ">
+            query_type,
+        </if>
+        <if test=" htmlType != null and htmlType != '' ">
+            html_type,
+        </if>
+        <if test=" dictType != null and dictType != '' ">
+            dict_type,
+        </if>
+        <if test=" sort != null and ( sort > 0 ) ">
+            sort,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        create_time,
+        update_time
+        ) VALUES (
+        <if test=" tableId != null and tableId != '' ">
+            #{tableId},
+        </if>
+        <if test=" fieldAlias != null and fieldAlias != '' ">
+            #{fieldAlias},
+        </if>
+        <if test=" columnName != null and columnName != '' ">
+            #{columnName},
+        </if>
+        <if test=" columnComment != null and columnComment != '' ">
+            #{columnComment},
+        </if>
+        <if test=" columnType != null and columnType != ''  ">
+            #{columnType},
+        </if>
+        <if test=" javaType != null and javaType != '' ">
+            #{javaType},
+        </if>
+        <if test=" javaField != null  and javaField != '' ">
+            #{javaField},
+        </if>
+        <if test=" isPk != null and ( isPk == '1' or isPk == '0' ) ">
+            #{isPk},
+        </if>
+        <if test=" isIncrement != null and ( isIncrement == '1' or isIncrement == '0' ) ">
+            #{isIncrement},
+        </if>
+        <if test=" isRequired != null and ( isRequired == '1' or isRequired == '0' ) ">
+            #{isRequired},
+        </if>
+        <if test=" isInsert != null and ( isInsert == '1' or isInsert == '0' ) ">
+            #{isInsert},
+        </if>
+        <if test=" isEdit != null and ( isEdit == '1' or isEdit == '0' ) ">
+            #{isEdit},
+        </if>
+        <if test=" isList != null and ( isList == '1' or isList == '0' ) ">
+            #{isList},
+        </if>
+        <if test=" isQuery != null and ( isQuery == '1' or isQuery == '0' ) ">
+            #{isQuery},
+        </if>
+        <if test=" queryType != null and queryType != '' ">
+            #{queryType},
+        </if>
+        <if test=" htmlType != null and htmlType != '' ">
+            #{htmlType},
+        </if>
+        <if test=" dictType != null and dictType != '' ">
+            #{dictType},
+        </if>
+        <if test=" sort != null and ( sort > 0 ) ">
+            #{sort},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+    <!--  根据生成器表列数据更新生成器表列数据  -->
+    <update id="updateGenTableColumn" parameterType="org.lc.admin.generator.entities.entity.GenTableColumn">
+        UPDATE gen_table_column
+        <set>
+            <if test=" columnComment != null and columnComment != '' ">
+                column_comment = #{columnComment},
+            </if>
+            <if test=" javaType != null and javaType != '' ">
+                java_type = #{javaType},
+            </if>
+            <if test=" javaField != null and javaField != '' ">
+                java_field = #{javaField},
+            </if>
+            <if test=" isInsert != null and ( isInsert == '0' or isInsert == '1' ) ">
+                is_insert = #{isInsert},
+            </if>
+            <if test=" isList != null and ( isList == '0' or isList == '1' ) ">
+                is_list = #{isList},
+            </if>
+            <if test=" isQuery != null and ( isQuery == '0' or isQuery == '1' ) ">
+                is_query = #{isQuery},
+            </if>
+            <if test=" isRequired != null and ( isRequired == '0' or isRequired == '1' ) ">
+                is_required = #{isRequired},
+            </if>
+            <if test=" queryType != null and queryType != '' ">
+                query_type = #{queryType},
+            </if>
+            <if test=" htmlType != null and htmlType != '' ">
+                html_type = #{htmlType},
+            </if>
+            <if test=" dictType != null and dictType != '' ">
+                dict_type = #{dictType},
+            </if>
+            <if test=" sort != null and sort > 0 ">
+                sort = #{sort},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = NOW()
+        </set>
+        where column_id = #{columnId}
+    </update>
+
+    <!--  根据生成器表主键列表删除生成器表列数据  -->
+    <delete id="deleteGenTableColumnByTableIds">
+        DELETE FROM gen_table_column WHERE table_id IN
+        <foreach collection="tableIds" index="index" item="tableId" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+    </delete>
+
+    <!--  根据生成器表列主键列表删除生成器表列列表数据  -->
+    <delete id="deleteGenTableColumnByIds">
+        DELETE FROM gen_table_column WHERE column_id IN
+        <foreach collection="columnIds" index="index" item="columnId" open="(" separator="," close=")">
+            #{columnId}
+        </foreach>
+    </delete>
+
+    <!--  根据生成器表主键删除生成器表列数据  -->
+    <delete id="deleteGenTableColumnByTableId">
+        DELETE
+        FROM gen_table_column
+        WHERE table_id = #{tableId}
+    </delete>
+
+    <!--  根据生成器表id查询生成器表列列表数据  -->
+    <select id="selectGenTableColumnListByTableId"
+            resultMap="genTableColumnResultMap">
+        <include refid="selectGenTableColumn"/>
+        WHERE table_id = #{tableId}
+        ORDER BY sort
+    </select>
+
+
+</mapper>

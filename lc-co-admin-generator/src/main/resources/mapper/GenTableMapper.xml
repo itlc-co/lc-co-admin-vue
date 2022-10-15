@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.generator.mapper.GenTableMapper">
+
+    <!--  生成器表结果集映射  -->
+    <resultMap id="genTableResultMap" type="org.lc.admin.generator.entities.entity.GenTable">
+        <id column="table_id" property="tableId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="table_name" property="tableName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="table_comment" property="tableComment" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="class_name" property="className" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="tpl_category" property="tplCategory" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="package_name" property="packageName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="module_name" property="moduleName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="business_name" property="businessName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="function_name" property="functionName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="function_author" property="functionAuthor" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="gen_type" property="genType" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="gen_path" property="genPath" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="options" property="options" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!--  生成器表结果集映射  -->
+    <resultMap id="genTableVoResultMap" type="org.lc.admin.generator.entities.entity.GenTable">
+        <id column="table_id" property="tableId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="table_name" property="tableName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="table_comment" property="tableComment" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="class_name" property="className" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="tpl_category" property="tplCategory" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="package_name" property="packageName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="module_name" property="moduleName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="business_name" property="businessName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="function_name" property="functionName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="function_author" property="functionAuthor" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="gen_type" property="genType" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="gen_path" property="genPath" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="options" property="options" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <collection columnPrefix="column_" property="columns" javaType="java.util.List"
+                    resultMap="genTableColumnResult"/>
+    </resultMap>
+
+    <!--   生成器表列结果集映射 -->
+    <resultMap id="genTableColumnResult" type="org.lc.admin.generator.entities.entity.GenTableColumn">
+        <result column="id" property="columnId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="field_alias" property="fieldAlias" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="name" property="columnName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="comment" property="columnComment" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="type" property="columnType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="java_type" property="javaType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="java_field" property="javaField" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_pk" property="isPk" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_increment" property="isIncrement" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_required" property="isRequired" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_insert" property="isInsert" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_edit" property="isEdit" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_list" property="isList" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_query" property="isQuery" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="query_type" property="queryType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="html_type" property="htmlType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--  查询生成器表字段  -->
+    <sql id="selectGenTable">
+        SELECT table_id,
+               table_name,
+               table_comment,
+               sub_table_name,
+               sub_table_fk_name,
+               class_name,
+               tpl_category,
+               package_name,
+               module_name,
+               business_name,
+               function_name,
+               function_author,
+               gen_type,
+               gen_path,
+               options,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        FROM gen_table
+    </sql>
+
+    <sql id="selectGenTableVo">
+        SELECT gt.table_id,
+               gt.table_name,
+               gt.table_comment,
+               gt.sub_table_name,
+               gt.sub_table_fk_name,
+               gt.class_name,
+               gt.tpl_category,
+               gt.package_name,
+               gt.module_name,
+               gt.business_name,
+               gt.function_name,
+               gt.function_author,
+               gt.options,
+               gt.gen_type,
+               gt.gen_path,
+               gt.remark,
+               gc.column_id,
+               gc.column_name,
+               gc.column_comment,
+               gc.column_type,
+               gc.field_alias  column_field_alias,
+               gc.java_type    column_java_type,
+               gc.java_field   column_java_field,
+               gc.is_pk        column_is_pk,
+               gc.is_increment column_is_increment,
+               gc.is_required  column_is_required,
+               gc.is_insert    column_is_insert,
+               gc.is_edit      column_is_edit,
+               gc.is_list      column_is_list,
+               gc.is_query     column_is_query,
+               gc.query_type   column_query_type,
+               gc.html_type    column_html_type,
+               gc.dict_type    column_dict_type,
+               gc.sort         column_sort
+        FROM gen_table gt
+                 LEFT JOIN gen_table_column gc ON gt.table_id = gc.table_id
+    </sql>
+
+
+    <!--  根据生成器表插入生成器表数据  -->
+    <insert id="insertGenTable" parameterType="org.lc.admin.generator.entities.entity.GenTable" useGeneratedKeys="true"
+            keyColumn="table_id" keyProperty="tableId">
+        INSERT INTO gen_table (
+        <if test=" tableId != null and tableId > 0">
+            table_id,
+        </if>
+        <if test=" tableName != null and tableName != '' ">
+            table_name,
+        </if>
+        <if test=" tableComment != null and tableComment != '' ">
+            table_comment,
+        </if>
+        <if test=" className != null and className != '' ">
+            class_name,
+        </if>
+        <if test=" tplCategory != null and tplCategory != '' ">
+            tpl_category,
+        </if>
+        <if test=" packageName != null and packageName != '' ">
+            package_name,
+        </if>
+        <if test=" moduleName != null and moduleName != '' ">
+            module_name,
+        </if>
+        <if test=" businessName != null and businessName != '' ">
+            business_name,
+        </if>
+        <if test=" functionName != null and functionName != '' ">
+            function_name,
+        </if>
+        <if test=" functionAuthor != null and functionAuthor != '' ">
+            function_author,
+        </if>
+        <if test=" genType != null and genType != '' ">
+            gen_type,
+        </if>
+        <if test=" genPath != null and genPath != '' ">
+            gen_path,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        <if test=" remark != null and remark != '' ">
+            remark,
+        </if>
+        create_time,
+        update_time
+        )
+        VALUES (
+        <if test=" tableId != null and tableId > 0">
+            #{tableId},
+        </if>
+        <if test=" tableName != null and tableName != '' ">
+            #{tableName},
+        </if>
+        <if test=" tableComment != null and tableComment != '' ">
+            #{tableComment},
+        </if>
+        <if test=" className != null and className != '' ">
+            #{className},
+        </if>
+        <if test=" tplCategory != null and tplCategory != '' ">
+            #{tplCategory},
+        </if>
+        <if test=" packageName != null and packageName != '' ">
+            #{packageName},
+        </if>
+        <if test=" moduleName != null and moduleName != '' ">
+            #{moduleName},
+        </if>
+        <if test=" businessName != null and businessName != '' ">
+            #{businessName},
+        </if>
+        <if test=" functionName != null and functionName != '' ">
+            #{functionName},
+        </if>
+        <if test=" functionAuthor != null and functionAuthor != '' ">
+            #{functionAuthor},
+        </if>
+        <if test=" genType != null and genType != '' ">
+            #{genType},
+        </if>
+        <if test=" genPath != null and genPath != '' ">
+            #{genPath},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  根据生成器表数据更新生成器表数据  -->
+    <update id="updateGenTable" parameterType="org.lc.admin.generator.entities.entity.GenTable">
+        UPDATE gen_table
+        <set>
+            <if test=" tableName != null and tableName != '' ">
+                table_name = #{tableName},
+            </if>
+            <if test=" tableComment != null and tableComment != '' ">
+                table_comment = #{tableComment},
+            </if>
+            <if test=" className != null and className != '' ">
+                class_name = #{className},
+            </if>
+            <if test=" functionAuthor != null and functionAuthor != '' ">
+                function_author = #{functionAuthor},
+            </if>
+            <if test=" genType != null and genType != '' ">
+                gen_type = #{genType},
+            </if>
+            <if test=" genPath != null and genPath != '' ">
+                gen_path = #{genPath},
+            </if>
+            <if test=" tplCategory != null and tplCategory != '' ">
+                tpl_category = #{tplCategory},
+            </if>
+            <if test=" packageName != null and packageName != '' ">
+                package_name = #{packageName},
+            </if>
+            <if test=" moduleName != null and moduleName != '' ">
+                module_name = #{moduleName},
+            </if>
+            <if test=" businessName != null and businessName != '' ">
+                business_name = #{businessName},
+            </if>
+            <if test=" functionName != null and functionName != '' ">
+                function_name = #{functionName},
+            </if>
+            <if test=" options != null and options != '' ">
+                options = #{options},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            <if test=" remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE table_id = #{tableId}
+    </update>
+
+    <!--  根据生成器表主键列表删除生成器表列表数据  -->
+    <delete id="deleteGenTableByIds">
+        DELETE FROM gen_table WHERE table_id IN
+        <foreach collection="tableIds" index="index" item="tableId" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+    </delete>
+
+    <!--  根据请求参数查询生成器表列表数据  -->
+    <select id="selectGenTableList" resultMap="genTableResultMap"
+            parameterType="org.lc.admin.generator.entities.request.GenTableRequest">
+        <include refid="selectGenTable"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" tableName != null and tableName != '' ">
+                    AND LOWER(table_name) LIKE LOWER(CONCAT('%',#{tableName},'%'))
+                </if>
+                <if test=" tableComment != null and tableComment != '' ">
+                    AND LOWER(table_comment) LIKE LOWER(CONCAT('%',#{tableComment},'%'))
+                </if>
+                <if test=" params.startTime!=null and params.startTime != '' ">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test=" params.endTime!=null and params.endTime != '' ">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据生成器表id查询生成器表数据  -->
+    <select id="selectGenTableById" resultMap="genTableVoResultMap" parameterType="java.lang.Long">
+        <include refid="selectGenTableVo"/>
+        WHERE gt.table_id = #{tableId}
+    </select>
+
+    <!--  查询所有生成器表列表数据  -->
+    <select id="selectGenTableAll" resultMap="genTableVoResultMap">
+        <include refid="selectGenTableVo"/>
+        ORDER BY gc.sort
+    </select>
+
+    <!--   根据生成器表名查询生成器表数据 -->
+    <select id="selectGenTableByName" resultMap="genTableVoResultMap" parameterType="java.lang.String">
+        <include refid="selectGenTableVo"/>
+        WHERE table_name = #{tableName}
+    </select>
+
+</mapper>

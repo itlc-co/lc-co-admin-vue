@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemPostMapper">
+
+    <!--  系统岗位结果集映射  -->
+    <resultMap id="systemPostResultMap" type="org.lc.admin.system.entities.entity.SystemPost">
+        <id column="post_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="post_code" property="postCode" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="post_name" property="postName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <!--  系统岗位Bo实体结果集映射  -->
+    <resultMap id="systemPostBoResultMap" type="org.lc.admin.system.entities.bo.SystemPostBo">
+        <id column="post_id" property="postId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="post_code" property="postCode" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="post_name" property="postName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="postStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询系统岗位字段  -->
+    <sql id="selectSystemPost">
+        SELECT sp.post_id,
+               sp.post_code,
+               sp.post_name,
+               sp.order_num,
+               sp.`status`,
+               sp.create_by,
+               sp.create_time,
+               sp.update_by,
+               sp.update_time,
+               sp.remark
+        FROM system_post sp
+    </sql>
+
+    <!--  查询系统启用的岗位的字段  -->
+    <sql id="selectSystemPostNormal">
+        SELECT sp.post_id,
+               sp.post_code,
+               sp.post_name,
+               sp.order_num,
+               sp.`status`,
+               sp.create_by,
+               sp.create_time,
+               sp.update_by,
+               sp.update_time,
+               sp.remark
+        FROM system_post sp
+        WHERE sp.status = 0
+    </sql>
+
+    <!--  查询系统岗位Bo字段  -->
+    <sql id="selectSystemPostBo">
+        SELECT sp.post_id,
+               sp.post_code,
+               sp.post_name,
+               sp.`status`
+        FROM system_post sp
+    </sql>
+
+    <!--  查询系统岗位id  -->
+    <sql id="selectSystemPostId">
+        SELECT DISTINCTROW sp.post_id
+        FROM system_post sp
+                 LEFT JOIN system_user_post sup ON sup.post_id = sp.post_id
+                 LEFT JOIN system_user su ON su.user_id = sup.user_id
+        WHERE sp.status = 0
+    </sql>
+
+    <!--  插入岗位数据  -->
+    <insert id="insertPost">
+        INSERT INTO system_post (
+        <if test=" id != null and id > 0 ">
+            post_id,
+        </if>
+        <if test=" postName != null and postName != '' ">
+            post_name,
+        </if>
+        <if test=" postCode != null and postCode != '' ">
+            post_code,
+        </if>
+        <if test=" orderNum != null and orderNum > 0 ">
+            order_num,
+        </if>
+        <if test=" status != null and ( status == 0  or status == 1 ) ">
+            status,
+        </if>
+        <if test=" remark != null and remark != '' ">
+            remark,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        create_time,
+        update_time
+        )
+        VALUES (
+        <if test=" id != null and id > 0 ">
+            #{id},
+        </if>
+        <if test=" postName != null and postName != '' ">
+            #{postName},
+        </if>
+        <if test=" postCode != null and postCode != '' ">
+            #{postCode},
+        </if>
+        <if test=" orderNum != null and orderNum > 0 ">
+            #{orderNum},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  更新岗位数据  -->
+    <update id="updatePost">
+        UPDATE system_post
+        <set>
+            <if test=" postName != null and postName != '' ">
+                post_name = #{postName},
+            </if>
+            <if test=" postCode != null and postCode != '' ">
+                post_code = #{postCode},
+            </if>
+            <if test=" orderNum != null and orderNum > 0 ">
+                order_num = #{orderNum},
+            </if>
+            <if test=" status != null and ( status == 0 or status == 1 ) ">
+                `status` = #{status},
+            </if>
+            <if test=" remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE post_id = #{id}
+    </update>
+
+    <!--  根据岗位id列表删除岗位数据  -->
+    <delete id="deletePostByIds">
+        DELETE FROM system_post WHERE post_id IN
+        <foreach collection="postIds" item="postId" open="(" separator="," close=")">
+            #{postId}
+        </foreach>
+    </delete>
+
+    <!--  根据岗位id删除岗位数据  -->
+    <delete id="deletePostById">
+        DELETE
+        FROM system_post
+        WHERE post_id = #{postId}
+    </delete>
+
+    <!--  查询所有岗位列表  -->
+    <select id="selectPostsAll" resultMap="systemPostResultMap">
+        <include refid="selectSystemPostNormal"/>
+    </select>
+
+    <!--  根据用户id查询岗位id列表数据  -->
+    <select id="selectPostIdsByUserId" resultType="java.lang.Long">
+        <include refid="selectSystemPostId"/>
+        AND sup.user_id = #{userId}
+    </select>
+
+    <!--  查询岗位列表数据  -->
+    <select id="selectPostList" resultMap="systemPostResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemPostRequest">
+        <include refid="selectSystemPost"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" postCode != null and postCode != '' ">
+                    AND post_code LIKE CONCAT('%', #{postCode}, '%')
+                </if>
+                <if test="status != null and ( status == 0 or status == 1 )">
+                    AND `status` = #{status}
+                </if>
+                <if test=" postName != null and postName != '' ">
+                    AND post_name LIKE CONCAT('%', #{postName}, '%')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据岗位id查询岗位数据  -->
+    <select id="selectPostById" resultMap="systemPostResultMap">
+        <include refid="selectSystemPost"/>
+        WHERE sp.post_id = #{postId}
+    </select>
+
+    <!--  根据岗位名称查询岗位数据  -->
+    <select id="selectPostByName" resultMap="systemPostResultMap">
+        <include refid="selectSystemPost"/>
+        WHERE post_name = #{postName} LIMIT 1
+    </select>
+
+    <!--  根据岗位编码查询岗位数据  -->
+    <select id="selectPostByCode" resultMap="systemPostResultMap">
+        <include refid="selectSystemPost"/>
+        WHERE post_code = #{postCode} LIMIT 1
+    </select>
+
+    <!--  根据用户名称查询岗位名称集合数据  -->
+    <select id="selectPostNamesByUserName" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT DISTINCT sp.post_name
+        FROM system_post sp
+                 LEFT JOIN system_user_post sup ON sup.post_id = sp.post_id
+                 LEFT JOIN system_user su ON sup.user_id = su.user_id
+        WHERE sp.`status` = 0
+          AND su.`status` = 0
+          AND su.user_name = #{userName}
+    </select>
+
+    <!--  查询岗位Bo列表数据  -->
+    <select id="selectPostBoList" resultMap="systemPostBoResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemPostRequest">
+        <include refid="selectSystemPostBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" postCode != null and postCode != '' ">
+                    AND post_code LIKE CONCAT('%', #{postCode}, '%')
+                </if>
+                <if test="status != null and ( status == 0 or status == 1 )">
+                    AND `status` = #{status}
+                </if>
+                <if test=" postName != null and postName != '' ">
+                    AND post_name LIKE CONCAT('%', #{postName}, '%')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+</mapper>

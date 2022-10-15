@@ -1,0 +1,82 @@
+package ${packageName}.mapper;
+
+import org.apache.ibatis.annotations.Param;
+import ${packageName}.entities.entity.${ClassName};
+import ${packageName}.entities.bo.${ClassName}Bo;
+import ${packageName}.entities.request.${ClassName}Request;
+
+import java.util.List;
+
+/**
+ * Description: ${functionName}mapper接口
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+public interface ${ClassName}Mapper {
+
+    /**
+     * Description: 根据请求参数查询${functionName}列表数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link List }<{@link ${ClassName} }> ${functionName}列表数据
+     * @date 2022-09-20 13:40
+     */
+    List<${ClassName}> select${ClassName}List(${ClassName}Request requestParam);
+
+    /**
+     * Description: 根据${functionName}主键查询${functionName}数据
+     *
+     * @param ${pkColumn.javaField} ${functionName}主键
+     * @return {@link ${ClassName} } ${functionName}数据
+     * @date 2022-09-20 13:40
+     */
+     ${ClassName} select${ClassName}By${pkColumn.fieldAlias}(@Param("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField});
+
+    /**
+     * Description: 根据请求参数查询${functionName}bo列表数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link List }<{@link ${ClassName}Bo }> ${functionName}bo列表
+     * @date 2022-09-20 21:11
+     */
+    List<${ClassName}Bo> select${ClassName}BoList(${ClassName}Request requestParam);
+
+    /**
+     * Description: 根据${functionName}数据插入${functionName}数据
+     *
+     * @param ${className} ${functionName}数据
+     * @return {@link Integer } 记录数
+     * @date 2022-09-20 19:22
+     */
+    Integer insert${ClassName}(${ClassName} ${className});
+
+    /**
+     * Description: 根据${functionName}数据更新${functionName}数据
+     *
+     * @param ${className} ${functionName}数据
+     * @return {@link Integer } 记录数
+     * @date 2022-09-20 15:43
+     */
+    Integer update${ClassName}(${ClassName} ${className});
+
+    /**
+     * Description: 根据${functionName}主键删除${functionName}数据
+     *
+     * @param ${pkColumn.javaField} ${functionName}主键
+     * @return {@link Integer } 记录数
+     * @date 2022-10-06 22:06
+     */
+    Integer delete${ClassName}By${pkColumn.fieldAlias}(@Param("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField});
+
+    /**
+     * Description: 根据${functionName}主键列表删除${functionName}列表数据
+     *
+     * @param ${pkColumn.javaField}s ${functionName}主键列表
+     * @return {@link Integer } 记录数
+     * @date 2022-09-20 13:40
+     */
+    Integer delete${ClassName}By${pkColumn.fieldAlias}s(@Param("${pkColumn.javaField}s") List<${pkColumn.javaType}> ${pkColumn.javaField}s);
+
+}

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemMenuMapper">
+
+    <!--  系统菜单结果集映射 -->
+    <resultMap id="systemMenuResultMap" type="org.lc.admin.system.entities.entity.SystemMenu">
+        <id column="menu_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="path" property="path" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="component" property="component" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="query" property="query" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_frame" property="isFrame" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="is_cache" property="isCache" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="menu_type" property="menuType" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="visible" property="visible" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="perms" property="perms" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    </resultMap>
+
+
+    <!--   查询系统菜单字段  -->
+    <sql id="selectSystemMenu">
+        SELECT DISTINCT sm.menu_id,
+                        sm.menu_name,
+                        sm.menu_type,
+                        sm.parent_id,
+                        sm.component,
+                        sm.path,
+                        sm.`query`,
+                        sm.visible,
+                        sm.`status`,
+                        sm.is_cache,
+                        sm.is_frame,
+                        sm.icon,
+                        sm.order_num,
+                        sm.create_time,
+                        sm.update_by,
+                        sm.create_by,
+                        sm.update_time,
+                        IFNULL(sm.perms, '') AS perms
+        FROM system_menu sm
+    </sql>
+
+    <!--  查询系统菜单树字段  -->
+    <sql id="selectSystemMenuTree">
+        SELECT DISTINCTROW sm.menu_id,
+                           sm.menu_name,
+                           sm.menu_type,
+                           sm.parent_id,
+                           sm.component,
+                           sm.path,
+                           sm.`query`,
+                           sm.visible,
+                           sm.`status`,
+                           sm.is_cache,
+                           sm.is_frame,
+                           sm.icon,
+                           sm.order_num,
+                           sm.create_time,
+                           sm.update_by,
+                           sm.create_by,
+                           sm.update_time,
+                           IFNULL(sm.perms, '') AS perms
+        FROM system_menu sm
+                 LEFT JOIN system_role_menu srm ON srm.menu_id = sm.menu_id
+                 LEFT JOIN system_role sr ON sr.role_id = srm.role_id
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+    </sql>
+
+    <!--  插入菜单数据  -->
+    <insert id="insertMenu" parameterType="org.lc.admin.system.entities.entity.SystemMenu">
+        INSERT INTO system_menu (
+        <if test=" id != null and id > 0 ">menu_id,</if>
+        <if test=" parentId != null and parentId > 0 ">parent_id,</if>
+        <if test=" menuName != null and menuName != '' ">menu_name,</if>
+        <if test=" orderNum != null and orderNum > 0 ">order_num,</if>
+        <if test=" path != null and path != '' ">path,</if>
+        <if test=" component != null and component != '' ">component,</if>
+        <if test=" query != null and query != '' ">`query`,</if>
+        <if test=" isFrame != null and isFrame != '' ">is_frame,</if>
+        <if test=" isCache != null and isCache != '' ">is_cache,</if>
+        <if test=" menuType != null and menuType != '' ">menu_type,</if>
+        <if test=" visible != null and ( visible == 0 or visible == 1) ">visible,</if>
+        <if test=" status != null and ( status == 0 or status == 1) ">status,</if>
+        <if test=" perms !=null and perms != '' ">perms,</if>
+        <if test=" icon != null and icon != '' ">icon,</if>
+        <if test=" remark != null and remark != '' ">remark,</if>
+        <if test=" createBy != null and createBy != '' ">create_by,</if>
+        <if test=" updateBy != null and updateBy != '' ">update_by,</if>
+        create_time,
+        update_time
+        ) VALUES (
+        <if test=" id != null and id > 0 ">
+            #{id},
+        </if>
+        <if test=" parentId != null and parentId > 0 ">
+            #{parentId},
+        </if>
+        <if test=" menuName != null and menuName != '' ">
+            #{menuName},
+        </if>
+        <if test=" orderNum != null and orderNum > 0 ">
+            #{orderNum},
+        </if>
+        <if test=" path != null and path != '' ">
+            #{path},
+        </if>
+        <if test=" component != null and component != '' ">
+            #{component},
+        </if>
+        <if test=" query != null and query != '' ">
+            #{query},
+        </if>
+        <if test=" isFrame != null and isFrame != '' ">
+            #{isFrame},
+        </if>
+        <if test=" isCache != null and isCache != '' ">
+            #{isCache},
+        </if>
+        <if test=" menuType != null and menuType != '' ">
+            #{menuType},
+        </if>
+        <if test=" visible != null and ( visible == 0 or visible == 1) ">
+            #{visible},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1) ">
+            #{status},
+        </if>
+        <if test=" perms !=null and perms != '' ">
+            #{perms},
+        </if>
+        <if test=" icon != null and icon != '' ">
+            #{icon},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  更新菜单数据  -->
+    <update id="updateMenu" parameterType="org.lc.admin.system.entities.entity.SystemMenu">
+        UPDATE system_menu
+        <set>
+            <if test=" parentId != null and parentId > 0 ">
+                parent_id = #{parentId},
+            </if>
+            <if test=" menuName != null and menuName != '' ">
+                menu_name = #{menuName},
+            </if>
+            <if test=" orderNum != null and orderNum > 0 ">order_num = #{orderNum},</if>
+            <if test=" path != null and path != '' ">
+                `path` = #{path},
+            </if>
+            <if test=" component != null and component != '' ">
+                component = #{component},
+            </if>
+            <if test=" query != null and query != '' ">
+                `query` = #{query},
+            </if>
+            <if test=" isFrame != null ">
+                is_frame = #{isFrame},
+            </if>
+            <if test=" isCache != null ">
+                is_cache = #{isCache},
+            </if>
+            <if test=" menuType != null and menuType != '' ">
+                menu_type = #{menuType},
+            </if>
+            <if test=" visible != null and ( visible == 0 or visible == 1) ">
+                `visible` = #{visible},
+            </if>
+            <if test=" status != null and ( status == 0 or status == 1) ">
+                `status` = #{status},
+            </if>
+            <if test=" perms != null and perms != '' ">
+                perms = #{perms},
+            </if>
+            <if test=" icon != null and icon != '' ">
+                icon = #{icon},
+            </if>
+            <if test=" remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+            <if test=" updateBy != null and createBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE menu_id = #{id}
+    </update>
+
+    <!--  根据菜单id删除菜单数据  -->
+    <delete id="deleteMenuById" parameterType="java.lang.Long">
+        DELETE
+        FROM system_menu
+        WHERE menu_id = #{menuId}
+    </delete>
+
+    <!--  根据菜单id列表删除菜单数据  -->
+    <delete id="deleteMenuByIds">
+        DELETE
+        FROM system_menu
+        WHERE menu_id IN
+        <foreach collection="menuIds" index="index" item="menuId" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+    </delete>
+
+    <!-- 根据用户id查询菜单权限集合数据  -->
+    <select id="selectMenuPermissionsByUserId" resultType="java.lang.String" parameterType="java.lang.Long">
+        SELECT DISTINCTROW sm.perms
+        FROM system_menu sm
+                 LEFT JOIN system_role_menu srm ON srm.menu_id = sm.menu_id
+                 LEFT JOIN system_role sr ON sr.role_id = srm.role_id
+                 LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+        WHERE sur.user_id = #{userId}
+          AND sr.del_flag = 0
+          AND sr.`status` = 0
+          AND sm.`status` = 0
+    </select>
+
+
+    <!--    查询所有菜单树数据  -->
+    <select id="selectMenuTreeAll" resultMap="systemMenuResultMap">
+        <include refid="selectSystemMenu"/>
+        WHERE sm.`status` = 0
+        ORDER BY sm.parent_id,
+        sm.order_num
+    </select>
+
+    <!--    查询所有菜单路由树数据  -->
+    <select id="selectRouterTreeAll" resultMap="systemMenuResultMap">
+        <include refid="selectSystemMenu"/>
+        WHERE sm.menu_type IN ( 'M', 'C' )
+        AND sm.`status` = 0
+        ORDER BY sm.parent_id,
+        sm.order_num
+    </select>
+
+    <!--     根据用户id查询菜单树数据  -->
+    <select id="selectMenuTreeByUserId" resultMap="systemMenuResultMap">
+        <include refid="selectSystemMenuTree"/>
+        WHERE sur.user_id = #{userId}
+        AND sm.`status` = 0
+        AND sr.del_flag = 0
+        AND sr.`status` = 0
+        ORDER BY sm.parent_id,
+        sm.order_num
+    </select>
+
+    <!--     根据用户id查询菜单路由树数据  -->
+    <select id="selectRouterTreeByUserId" resultMap="systemMenuResultMap">
+        <include refid="selectSystemMenuTree"/>
+        WHERE sm.menu_type IN ( 'M', 'C' )
+        AND sur.user_id = #{userId}
+        AND sm.`status` = 0
+        AND sr.del_flag = 0
+        AND sr.`status` = 0
+        ORDER BY sm.parent_id,
+        sm.order_num
+    </select>
+
+
+    <!--  查询菜单列表数据  -->
+    <select id="selectMenuList" resultMap="systemMenuResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemMenuRequest">
+        <include refid="selectSystemMenu"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" menuName != null and menuName != '' ">
+                    AND sm.menu_name LIKE CONCAT('%',#{menuName},'%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1) ">
+                    AND sm.status = #{status}
+                </if>
+                <if test=" visible != null and ( visible == 0 or visible == 1) ">
+                    AND sm.visible = #{visible}
+                </if>
+            </trim>
+        </where>
+        ORDER BY parent_id, order_num
+    </select>
+
+
+    <!--  根据用户id查询菜单列表数据  -->
+    <select id="selectMenuListByUserId" resultMap="systemMenuResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemMenuRequest">
+        SELECT DISTINCTROW sm.menu_id,
+        sm.menu_name,
+        sm.menu_type,
+        sm.parent_id,
+        sm.component,
+        sm.path,
+        sm.`query`,
+        sm.visible,
+        sm.`status`,
+        sm.is_cache,
+        sm.is_frame,
+        sm.icon,
+        sm.order_num,
+        sm.create_time,
+        sm.update_by,
+        sm.create_by,
+        sm.update_time,
+        IFNULL(sm.perms, '') AS perms
+        FROM system_menu sm
+        LEFT JOIN system_role_menu srm ON srm.menu_id = sm.menu_id
+        LEFT JOIN system_role sr ON sr.role_id = srm.role_id
+        LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+        <where>
+            sur.user_id = #{params.userId}
+            <if test=" menuName != null and menuName != '' ">
+                AND sm.menu_name LIKE CONCAT('%',#{menuName},'%')
+            </if>
+            <if test=" status != null and ( status == 0 or status == 1) ">
+                AND sm.status = #{status}
+            </if>
+            <if test=" visible != null and ( visible == 0 or visible == 1) ">
+                AND sm.visible = #{visible}
+            </if>
+        </where>
+        ORDER BY parent_id, order_num
+    </select>
+
+    <!--  根据id查询菜单数据  -->
+    <select id="selectMenuById" resultMap="systemMenuResultMap"
+            parameterType="java.lang.Long">
+        <include refid="selectSystemMenu"/>
+        WHERE menu_id = #{menuId}
+    </select>
+
+    <!--  根据角色数据查询菜单id列表数据  -->
+    <select id="selectMenuIdsByRole" resultType="java.lang.Long">
+        SELECT
+        sm.menu_id
+        FROM
+        system_menu sm
+        LEFT JOIN system_role_menu srm ON srm.menu_id = sm.menu_id
+        <where>
+            srm.role_id = #{id}
+            <if test=" menuCheckStrictly != null and menuCheckStrictly">
+                AND sm.menu_id NOT IN (SELECT sm.parent_id FROM system_menu sm INNER JOIN system_role_menu srm ON
+                srm.menu_id = sm.menu_id AND srm.role_id = #{id})
+            </if>
+        </where>
+        ORDER BY
+        sm.parent_id,
+        sm.order_num
+    </select>
+
+    <!--  查询所有菜单id列表  -->
+    <select id="selectMenuIdsAll" resultType="java.lang.Long">
+        SELECT
+        sm.menu_id
+        FROM
+        system_menu sm
+        <where>
+            <if test=" menuCheckStrictly != null and menuCheckStrictly">
+                sm.menu_id NOT IN (SELECT sm.parent_id FROM system_menu sm INNER JOIN system_role_menu srm ON
+                srm.menu_id = sm.menu_id)
+            </if>
+        </where>
+        ORDER BY
+        sm.parent_id,
+        sm.order_num
+    </select>
+
+    <!-- 根据父菜单id与菜单名称查询菜单数据   -->
+    <select id="selectUniqueMenu" resultMap="systemMenuResultMap">
+        <include refid="selectSystemMenu"/>
+        WHERE sm.menu_name = #{menuName} AND sm.parent_id = #{parentId} LIMIT 1
+    </select>
+
+    <!--  根据菜单id查询子菜单数量  -->
+    <select id="selectCntChildMenuById" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM system_menu
+        WHERE parent_id = #{menuId}
+    </select>
+
+
+</mapper>

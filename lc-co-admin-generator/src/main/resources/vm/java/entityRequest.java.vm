@@ -1,0 +1,35 @@
+package ${packageName}.entities.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.lc.admin.common.base.entities.request.BaseRequest;
+import java.time.*;
+
+/**
+ * Description: ${functionName}请求参数
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ${ClassName}Request extends BaseRequest {
+
+#set($excludeField=['id','createBy',"updateBy","createTime","updateTime","remark","orderNum","delFlag","status"])
+
+
+#foreach ($column in $columns)
+    #if(!$excludeField.contains($column.javaField))
+    /**
+     * $column.columnComment
+     */
+    private $column.javaType $column.javaField;
+    #end
+#end
+
+}

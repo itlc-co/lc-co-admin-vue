@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.OperationLogMapper">
+
+    <!--  操作日志结果集映射  -->
+    <resultMap id="operationLogResultMap" type="org.lc.admin.system.entities.entity.OperationLog">
+        <id column="operation_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="operation_module" property="operationModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="business_type" property="businessType" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="method" property="method" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="request_method" property="requestMethod" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operator_type" property="operatorType" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dept_name" property="deptName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_url" property="operationUrl" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_ip" property="operationIp" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_location" property="operationLocation" jdbcType="VARCHAR"
+                javaType="java.lang.String"/>
+        <result column="operation_param" property="operationParam" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="result_response" property="resultResponse" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <!--  操作日志bo结果集映射  -->
+    <resultMap id="operationLogBoResultMap" type="org.lc.admin.system.entities.bo.OperationLogBo">
+        <id column="operation_id" property="operationId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="operation_module" property="operationModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="business_type" property="businessType" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="method" property="method" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="request_method" property="requestMethod" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operator_type" property="operatorType" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dept_name" property="deptName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_url" property="operationUrl" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_ip" property="operationIp" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_location" property="operationLocation" jdbcType="VARCHAR"
+                javaType="java.lang.String"/>
+        <result column="operation_param" property="operationParam" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="result_response" property="resultResponse" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="status" property="operationStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询操作日志字段  -->
+    <sql id="selectOperationLog">
+        SELECT ol.operation_id,
+               ol.operation_module,
+               ol.business_type,
+               ol.method,
+               ol.request_method,
+               ol.operator_type,
+               ol.operator_name,
+               ol.dept_name,
+               ol.operation_url,
+               ol.operation_ip,
+               ol.operation_location,
+               ol.operation_param,
+               ol.result_response,
+               ol.`status`,
+               ol.error_msg,
+               ol.operation_time
+        FROM operation_log ol
+    </sql>
+
+    <!--  查询操作日志bo字段  -->
+    <sql id="selectOperationLogBo">
+        SELECT ol.operation_id,
+               ol.operation_module,
+               ol.business_type,
+               ol.method,
+               ol.request_method,
+               ol.operator_type,
+               ol.operator_name,
+               ol.dept_name,
+               ol.operation_url,
+               ol.operation_ip,
+               ol.operation_location,
+               ol.operation_param,
+               ol.result_response,
+               ol.`status`,
+               ol.error_msg,
+               ol.operation_time
+        FROM operation_log ol
+    </sql>
+
+    <!--  根据操作日志实体添加操作日志数据  -->
+    <insert id="insertOperationLog" parameterType="org.lc.admin.system.entities.entity.OperationLog">
+        INSERT INTO operation_log (
+        <if test=" operationModule != null and operationModule != '' ">
+            operation_module,
+        </if>
+        <if test=" businessType != null and ( businessType gte 0 and businessType lte 10 ) ">
+            business_type,
+        </if>
+        <if test=" method != null and method != '' ">
+            method,
+        </if>
+        <if test=" requestMethod != null and requestMethod != '' ">
+            request_method,
+        </if>
+        <if test=" operatorType != null and ( operatorType gte 0 and operatorType lte 3 ) ">
+            operator_type,
+        </if>
+        <if test=" operatorName != null and  operatorName != '' ">
+            operator_name,
+        </if>
+        <if test=" deptName != null and  deptName != '' ">
+            dept_name,
+        </if>
+        <if test=" operationUrl != null and  operationUrl != '' ">
+            operation_url,
+        </if>
+        <if test=" operationIp != null and  operationIp != '' ">
+            operation_ip,
+        </if>
+        <if test=" operationLocation != null and  operationLocation != '' ">
+            operation_location,
+        </if>
+        <if test=" operationParam != null and  operationParam != '' ">
+            operation_param,
+        </if>
+        <if test=" resultResponse != null and  resultResponse != '' ">
+            result_response,
+        </if>
+        <if test=" errorMsg != null and  errorMsg != '' ">
+            error_msg,
+        </if>
+        <if test=" status != null and  ( status == 0 or status == 1) ">
+            status,
+        </if>
+        operation_time
+        )
+        VALUES (
+        <if test=" operationModule != null and operationModule != '' ">
+            #{operationModule},
+        </if>
+        <if test=" businessType != null and ( businessType gte 0 and businessType lte 10 ) ">
+            #{businessType},
+        </if>
+        <if test=" method != null and method != '' ">
+            #{method},
+        </if>
+        <if test=" requestMethod != null and requestMethod != '' ">
+            #{requestMethod},
+        </if>
+        <if test=" operatorType != null and ( operatorType gte 0 and operatorType lte 3 ) ">
+            #{operatorType},
+        </if>
+        <if test=" operatorName != null and  operatorName != '' ">
+            #{operatorName},
+        </if>
+        <if test=" deptName != null and  deptName != '' ">
+            #{deptName},
+        </if>
+        <if test=" operationUrl != null and  operationUrl != '' ">
+            #{operationUrl},
+        </if>
+        <if test=" operationIp != null and  operationIp != '' ">
+            #{operationIp},
+        </if>
+        <if test=" operationLocation != null and  operationLocation != '' ">
+            #{operationLocation},
+        </if>
+        <if test=" operationParam != null and  operationParam != '' ">
+            #{operationParam},
+        </if>
+        <if test=" resultResponse != null and  resultResponse != '' ">
+            #{resultResponse},
+        </if>
+        <if test=" errorMsg != null and  errorMsg != '' ">
+            #{errorMsg},
+        </if>
+        <if test=" status != null and  ( status == 0 or status == 1) ">
+            #{status},
+        </if>
+        NOW()
+        )
+    </insert>
+
+    <!--  根据操作日志id列表删除操作日志数据 -->
+    <delete id="deleteOperationLogByIds">
+        DELETE FROM operation_log WHERE operation_id IN
+        <foreach collection="operationIds" index="index" item="operationId" open="(" separator="," close=")">
+            #{operationId}
+        </foreach>
+    </delete>
+
+    <!--  根据操作日志id删除操作日志数据  -->
+    <delete id="deleteOperationLogById">
+        DELETE
+        FROM operation_log
+        WHERE operation_id = #{operationId}
+    </delete>
+
+    <!--  清空操作日志数据   -->
+    <update id="cleanOperationLog">
+        TRUNCATE TABLE operation_log
+    </update>
+
+    <!--   根据请求参数查询操作日志列表  -->
+    <select id="selectOperationLogList" resultMap="operationLogResultMap"
+            parameterType="org.lc.admin.system.entities.request.OperationLogRequest">
+        <include refid="selectOperationLog"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" operationModule != null and operationModule != '' ">
+                    AND ol.operation_module LIKE CONCAT('%',#{operationModule},'%')
+                </if>
+                <if test=" operatorName != null and operatorName != '' ">
+                    AND ol.operator_name LIKE CONCAT('%',#{operatorName},'%')
+                </if>
+                <if test=" businessType != null and ( businessType gte 0 and businessType lte 4 ) ">
+                    AND ol.business_type = #{businessType}
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1) ">
+                    AND ol.status = #{status}
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(ol.operation_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(ol.operation_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+        ORDER BY ol.operation_time DESC
+    </select>
+
+    <!--   根据请求参数查询操作日志bo列表数据  -->
+    <select id="selectOperationLogBoList" resultMap="operationLogBoResultMap"
+            parameterType="org.lc.admin.system.entities.request.OperationLogRequest">
+        <include refid="selectOperationLogBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" operationModule != null and operationModule != '' ">
+                    AND ol.operation_module LIKE CONCAT('%',#{operationModule},'%')
+                </if>
+                <if test=" operatorName != null and operatorName != '' ">
+                    AND ol.operator_name LIKE CONCAT('%',#{operatorName},'%')
+                </if>
+                <if test=" businessType != null and ( businessType gte 0 and businessType lte 4 ) ">
+                    AND ol.business_type = #{businessType}
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1) ">
+                    AND ol.status = #{status}
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(ol.operation_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(ol.operation_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+        ORDER BY ol.operation_time DESC
+    </select>
+
+
+</mapper>

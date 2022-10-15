@@ -1,0 +1,134 @@
+package ${packageName}.controller;
+
+import org.lc.admin.common.annotation.Log;
+import org.lc.admin.common.annotation.Pagination;
+import org.lc.admin.common.base.controller.BaseController;
+import org.lc.admin.common.base.entities.enums.StatusMsg;
+import org.lc.admin.common.base.entities.response.ResultResponse;
+import org.lc.admin.common.entities.enums.BusinessType;
+import org.lc.admin.common.exec.FileException;
+import org.lc.admin.common.entities.page.TableData;
+import org.lc.admin.common.exec.FileException;
+import ${packageName}.entities.request.${ClassName}Request;
+import ${packageName}.service.${ClassName}Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.io.IOException;
+
+/**
+ * Description: ${functionName}controller控制器
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+@RestController
+@RequestMapping("/${moduleName}/${businessName}")
+public class ${ClassName}Controller extends BaseController {
+
+    public static final String MODULE = "${moduleName}_${businessName}";
+
+    public static final Logger log = LoggerFactory.getLogger(${ClassName}Controller.class);
+
+    @Resource
+    private ${ClassName}Service ${className}Service;
+
+    /**
+     * Description: 查询${functionName}列表表格数据接口
+     *
+     * @param requestParam 请求参数
+     * @return {@link TableData } 表格数据
+     * @date ${dateTime}
+     */
+    @GetMapping("/list")
+    @Pagination
+    @PreAuthorize(value = "@permissionService.hasPermission('${permissionPrefix}:list')")
+    @Log(module = MODULE, businessType = BusinessType.SELECT)
+    public TableData list(${ClassName}Request requestParam) {
+        return getDataTable(${className}Service.select${ClassName}List(requestParam));
+    }
+
+    /**
+     * Description: 查询${functionName}数据接口
+     *
+     * @param ${pkColumn.javaField}  ${functionName}主键
+     * @return {@link ResultResponse } 结果集响应
+     * @date ${dateTime}
+     */
+    @GetMapping("/{${pkColumn.javaField}}")
+    @PreAuthorize(value = "@permissionService.hasPermission('${permissionPrefix}:query')")
+    @Log(module = MODULE, businessType = BusinessType.SELECT)
+    public ResultResponse ${className}(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField}) {
+        return success(${className}Service.select${ClassName}By${pkColumn.fieldAlias}(${pkColumn.javaField}));
+    }
+
+
+    /**
+     * Description: 添加${functionName}数据接口
+     *
+     * @param requestParam 请求参数
+     * @return {@link ResultResponse } 结果集响应
+     * @date ${dateTime}
+     */
+    @PostMapping()
+    @PreAuthorize(value = "@permissionService.hasPermission('${permissionPrefix}:add')")
+    @Log(module = MODULE, businessType = BusinessType.INSERT)
+    public ResultResponse add(@RequestBody ${ClassName}Request requestParam) {
+        return toResponse(${className}Service.add${ClassName}(requestParam));
+    }
+
+    /**
+     * Description: 编辑${functionName}数据接口
+     *
+     * @param requestParam 请求参数
+     * @return {@link ResultResponse } 结果集响应
+     * @date ${dateTime}
+     */
+    @PutMapping()
+    @PreAuthorize(value = "@permissionService.hasPermission('${permissionPrefix}:edit')")
+    @Log(module = MODULE, businessType = BusinessType.UPDATE)
+    public ResultResponse edit(@RequestBody ${ClassName}Request requestParam) {
+        return toResponse(${className}Service.edit${ClassName}(requestParam));
+    }
+
+    /**
+     * Description: 删除${functionName}列表数据接口
+     *
+     * @param ${pkColumn.javaField}s ${functionName}主键列表
+     * @return {@link ResultResponse } 结果集响应
+     * @date ${dateTime}
+     */
+    @DeleteMapping("/{${pkColumn.javaField}s}")
+    @PreAuthorize(value = "@permissionService.hasPermission('${permissionPrefix}:remove')")
+    @Log(module = MODULE, businessType = BusinessType.DELETE)
+    public ResultResponse delete(@PathVariable("${pkColumn.javaField}s") List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
+        return toResponse(${className}Service.delete${ClassName}By${pkColumn.fieldAlias}s(${pkColumn.javaField}s));
+    }
+
+    /**
+     * Description: 导出${functionName}列表数据接口
+     *
+     * @param requestParam 请求参数
+     * @param response     响应
+     * @date ${dateTime}
+     */
+    @PostMapping("/export")
+    @PreAuthorize(value = "@permissionService.hasPermission('${permissionPrefix}:export')")
+    @Log(module = MODULE, businessType = BusinessType.EXPORT)
+    public void export(${ClassName}Request requestParam, HttpServletResponse response) {
+        try {
+            // 根据请求参数导出配置列表数据
+                ${className}Service.export(requestParam, response);
+        } catch (IOException e) {
+            throw new FileException(StatusMsg.EXCEL_EXPORT_ERROR);
+        }
+    }
+
+}

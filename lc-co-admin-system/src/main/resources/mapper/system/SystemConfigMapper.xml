@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemConfigMapper">
+
+    <!--  系统配置结果集映射  -->
+    <resultMap id="systemConfigResultMap" type="org.lc.admin.system.entities.entity.SystemConfig">
+        <id column="config_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="config_name" property="configName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="config_key" property="configKey" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="config_value" property="configValue" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="config_module" property="configModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_builtin" property="isBuiltin" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!--  系统配置Bo结果集映射  -->
+    <resultMap id="systemConfigBoResultMap" type="org.lc.admin.system.entities.bo.SystemConfigBo">
+        <id column="config_id" property="configId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="config_name" property="configName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="config_key" property="configKey" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="config_value" property="configValue" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="config_module" property="configModule" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_builtin" property="isBuiltin" jdbcType="CHAR" javaType="java.lang.Character"/>
+    </resultMap>
+
+    <!--  查询系统配置字段  -->
+    <sql id="selectSystemConfig">
+        SELECT sc.config_id,
+               sc.config_name,
+               sc.config_key,
+               sc.config_value,
+               sc.config_module,
+               sc.is_builtin,
+               sc.create_by,
+               sc.create_time,
+               sc.update_by,
+               sc.update_time,
+               sc.remark
+        FROM system_config sc
+    </sql>
+
+    <!--  查询系统配置Bo字段  -->
+    <sql id="selectSystemConfigBo">
+        SELECT sc.config_id,
+               sc.config_name,
+               sc.config_key,
+               sc.config_module,
+               sc.config_value,
+               sc.is_builtin
+        FROM system_config sc
+    </sql>
+
+    <!--  插入配置数据  -->
+    <insert id="insertConfig" parameterType="org.lc.admin.system.entities.entity.SystemConfig">
+        INSERT INTO system_config (
+        <if test=" configName != null and configName != '' ">
+            config_name,
+        </if>
+        <if test=" configKey != null and configKey != '' ">
+            config_key,
+        </if>
+        <if test=" configValue != null and configValue != '' ">
+            config_value,
+        </if>
+        <if test=" configModule != null and configModule != '' ">
+            config_module,
+        </if>
+        <if test=" isBuiltin != null ">
+            is_builtin,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        <if test=" remark != null and remark != '' ">
+            remark,
+        </if>
+        create_time,
+        update_time
+        )
+        VALUES (
+        <if test=" configName != null and configName != '' ">
+            #{configName},
+        </if>
+        <if test=" configKey != null and configKey != '' ">
+            #{configKey},
+        </if>
+        <if test=" configValue != null and configValue != '' ">
+            #{configValue},
+        </if>
+        <if test=" configModule != null and configModule != '' ">
+            #{configModule},
+        </if>
+        <if test=" isBuiltin != null ">
+            #{isBuiltin},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  更新配置数据  -->
+    <update id="updateConfig" parameterType="org.lc.admin.system.entities.entity.SystemConfig">
+        UPDATE system_config
+        <set>
+            <if test=" configName != null and configName != '' ">config_name = #{configName},</if>
+            <if test=" configKey != null and configKey != '' ">config_key = #{configKey},</if>
+            <if test=" configValue != null and configValue != '' ">config_value = #{configValue},</if>
+            <if test=" configModule != null and configModule != '' ">config_module = #{configModule},</if>
+            <if test=" isBuiltin != null ">is_builtin = #{isBuiltin},</if>
+            <if test=" updateBy != null and updateBy != '' ">update_by = #{updateBy},</if>
+            <if test=" remark != null and remark != '' ">remark = #{remark},</if>
+            update_time = NOW()
+        </set>
+        WHERE config_id = #{id}
+    </update>
+
+    <!--  根据配置id删除配置数据  -->
+    <delete id="deleteConfigById" parameterType="java.lang.Long">
+        DELETE
+        FROM system_config
+        WHERE config_id = #{configId}
+    </delete>
+
+    <!--  根据配置id列表删除配置数据  -->
+    <delete id="deleteConfigByIds">
+        DELETE
+        FROM system_config
+        WHERE config_id IN
+        <foreach collection="configIds" index="index" item="configId" open="(" separator="," close=")">
+            #{configId}
+        </foreach>
+    </delete>
+
+    <!-- 查询系统配置数据 -->
+    <select id="selectConfig" resultMap="systemConfigResultMap"
+            parameterType="org.lc.admin.system.entities.entity.SystemConfig">
+        <include refid="selectSystemConfig"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" configKey != null and configKey != ''">
+                    AND sc.config_key = #{configKey}
+                </if>
+                <if test=" id != null and id > 0">
+                    AND sc.config_id = #{id}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据配置键查询配置数据  -->
+    <select id="selectConfigValueByKey" resultType="java.lang.String">
+        SELECT config_value
+        FROM system_config
+        WHERE config_key = #{configKey}
+    </select>
+
+    <!--  查询配置列表数据  -->
+    <select id="selectConfigList" resultMap="systemConfigResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemConfigRequest">
+        <include refid="selectSystemConfig"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" configName != null and configName != '' ">
+                    AND sc.config_name LIKE CONCAT('%', #{configName}, '%')
+                </if>
+                <if test=" isBuiltin != null ">
+                    AND sc.is_builtin = #{isBuiltin}
+                </if>
+                <if test=" configKey != null and configKey != '' ">
+                    AND sc.config_key LIKE CONCAT('%', #{configKey}, '%')
+                </if>
+                <if test=" configModule != null and configModule != '' ">
+                    AND sc.config_module LIKE CONCAT('%', #{configModule}, '%')
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(sc.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(sc.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据配置id查询配置数据  -->
+    <select id="selectConfigById" resultMap="systemConfigResultMap" parameterType="java.lang.Long">
+        <include refid="selectSystemConfig"/>
+        WHERE config_id = #{configId}
+    </select>
+
+    <!--  根据配置键查询配置数据  -->
+    <select id="selectConfigByKey" resultMap="systemConfigResultMap" parameterType="java.lang.String">
+        <include refid="selectSystemConfig"/>
+        WHERE config_key = #{configKey}
+    </select>
+
+    <!--  根据配置键查询唯一配置数据  -->
+    <select id="selectConfigKeyUnique" resultMap="systemConfigResultMap" parameterType="java.lang.String">
+        <include refid="selectSystemConfig"/>
+        WHERE config_key = #{configKey} LIMIT 1
+    </select>
+
+    <!--  查询配置bo列表数据  -->
+    <select id="selectConfigBoList" resultMap="systemConfigBoResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemConfigRequest">
+        <include refid="selectSystemConfigBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" configName != null and configName != '' ">
+                    AND sc.config_name LIKE CONCAT('%', #{configName}, '%')
+                </if>
+                <if test=" isBuiltin != null ">
+                    AND sc.is_builtin = #{isBuiltin}
+                </if>
+                <if test="configKey != null and configKey != ''">
+                    AND sc.config_key LIKE CONCAT('%', #{configKey}, '%')
+                </if>
+                <if test=" configModule != null and configModule != '' ">
+                    AND sc.config_module LIKE CONCAT('%', #{configModule}, '%')
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(sc.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(sc.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据配置键查询配置模块  -->
+    <select id="selectConfigModuleByKey" resultType="java.lang.String">
+        SELECT DISTINCT config_module
+        FROM system_config
+        WHERE config_key = #{configKey}
+        LIMIT 1
+    </select>
+
+
+</mapper>

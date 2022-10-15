@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.generator.mapper.DataBaseTableColumnMapper">
+
+    <!--  数据库表列字段结果集映射  -->
+    <resultMap id="dataBaseTableColumnResultMap" type="org.lc.admin.generator.entities.entity.DataBaseTableColumn">
+        <id column="column_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="column_name" property="columnName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="column_comment" property="columnComment" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="column_type" property="columnType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="is_required" property="isRequired" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_primary_key" property="isPrimaryKey" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_auto_increment" property="isAutoIncrement" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="sort" property="sort" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询数据库表列字段  -->
+    <sql id="selectDataBaseTableColumn">
+        SELECT column_name,
+               (IF(is_nullable = 'no' <![CDATA[ && ]]>  column_key != 'PRI', '1', '0')) AS is_required,
+               (IF(column_key = 'PRI', '1', '0'))                        AS is_primary_key,
+               (IF(extra = 'auto_increment', '1', '0'))                  AS is_auto_increment,
+               ordinal_position                                          AS sort,
+               column_comment,
+               column_type
+        FROM information_schema.columns
+        WHERE table_schema = (SELECT DATABASE())
+    </sql>
+
+
+    <!--  根据数据库表名查询数据库表列字段列表  -->
+    <select id="selectDataBaseTableColumnList" resultMap="dataBaseTableColumnResultMap">
+        <include refid="selectDataBaseTableColumn"/>
+        AND table_name = (#{tableName})
+        ORDER BY ordinal_position
+    </select>
+
+
+</mapper>

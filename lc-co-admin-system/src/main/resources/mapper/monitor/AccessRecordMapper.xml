@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.AccessRecordMapper">
+
+    <!--  访问记录结果集映射  -->
+    <resultMap id="accessRecordResultMap" type="org.lc.admin.system.entities.entity.AccessRecord">
+        <id column="access_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="ipaddr" property="ipaddr" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="access_location" property="accessLocation" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="os" property="os" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="browser" property="browser" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="access_time" property="accessTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  访问记录bo结果集映射  -->
+    <resultMap id="accessRecordBoResultMap" type="org.lc.admin.system.entities.bo.AccessRecordBo">
+        <id column="access_id" property="accessId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="ipaddr" property="ipaddr" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="access_location" property="accessLocation" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="os" property="os" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="browser" property="browser" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="access_time" property="accessTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="status" property="accessStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询访问记录字段  -->
+    <sql id="selectAccessRecord">
+        SELECT ar.access_id,
+               ar.user_name,
+               ar.ipaddr,
+               ar.access_location,
+               ar.browser,
+               ar.os,
+               ar.`status`,
+               ar.msg,
+               ar.access_time
+        FROM access_record ar
+    </sql>
+
+    <!--  查询访问记录bo字段  -->
+    <sql id="selectAccessRecordBo">
+        SELECT ar.access_id,
+               ar.user_name,
+               ar.ipaddr,
+               ar.access_location,
+               ar.browser,
+               ar.os,
+               ar.`status`,
+               ar.msg,
+               ar.access_time
+        FROM access_record ar
+    </sql>
+
+    <!--  根据访问记录插入访问记录数据  -->
+    <insert id="insertAccessRecord" parameterType="org.lc.admin.system.entities.entity.AccessRecord">
+        INSERT INTO access_record (user_name, ipaddr, access_location, browser, os, status, msg, access_time)
+        VALUES (#{userName}, #{ipaddr}, #{accessLocation}, #{browser}, #{os}, #{status}, #{msg}, NOW())
+    </insert>
+
+    <!--  根据访问记录id列表删除访问记录数据  -->
+    <delete id="deleteAccessRecordByIds">
+        DELETE FROM access_record WHERE access_id IN
+        <foreach collection="accessIds" index="index" item="accessId" open="(" separator="," close=")">
+            #{accessId}
+        </foreach>
+    </delete>
+
+    <!--  根据访问记录id删除访问记录数据  -->
+    <delete id="deleteAccessRecordById">
+        DELETE
+        FROM access_record
+        WHERE access_id = #{accessId}
+    </delete>
+
+    <!--  清空访问记录数据 -->
+    <update id="cleanAccessRecord">
+        TRUNCATE TABLE access_record
+    </update>
+
+    <!--  根据请求参数查询访问记录列表数据  -->
+    <select id="selectAccessRecordList" resultMap="accessRecordResultMap"
+            parameterType="org.lc.admin.system.entities.request.AccessRecordRequest">
+        <include refid="selectAccessRecord"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" accessLocation != null and accessLocation != '' ">
+                    AND ar.access_location LIKE CONCAT('%',#{accessLocation},'%')
+                </if>
+                <if test=" userName != null and userName != '' ">
+                    AND ar.user_name LIKE CONCAT('%',#{userName},'%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND ar.status = #{status}
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(ar.access_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(ar.access_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+        ORDER BY ar.access_time DESC
+    </select>
+
+    <!--  根据请求参数查询访问记录bo列表数据  -->
+    <select id="selectAccessRecordBoList" resultMap="accessRecordBoResultMap"
+            parameterType="org.lc.admin.system.entities.request.AccessRecordRequest">
+        <include refid="selectAccessRecordBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" accessLocation != null and accessLocation != '' ">
+                    AND ar.access_location LIKE CONCAT('%',#{accessLocation},'%')
+                </if>
+                <if test=" userName != null and userName != '' ">
+                    AND ar.user_name LIKE CONCAT('%',#{userName},'%')
+                </if>
+                <if test=" status != null and ( status == 0 or status == 1 ) ">
+                    AND ar.status = #{status}
+                </if>
+                <if test="params.startTime!=null and params.startTime != ''">
+                    <!-- 开始时间检索 -->
+                    AND DATE_FORMAT(ar.access_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+                </if>
+                <if test="params.endTime!=null and params.endTime != ''">
+                    <!-- 结束时间检索 -->
+                    AND DATE_FORMAT(ar.access_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+                </if>
+            </trim>
+        </where>
+        ORDER BY ar.access_time DESC
+    </select>
+
+
+</mapper>

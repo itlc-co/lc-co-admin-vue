@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.AuthUserMapper">
+
+    <!--  认证用户结果集映射  -->
+    <resultMap id="authUserResultMap" type="org.lc.admin.common.entities.entity.AuthUser"
+               extends="org.lc.admin.system.mapper.SystemUserMapper.systemUserResultMap">
+        <association columnPrefix="dept_" property="dept" resultMap="systemDeptResultMap"
+                     javaType="org.lc.admin.common.entities.entity.SystemDept"/>
+        <collection columnPrefix="role_" property="roles" resultMap="systemRoleResultMap" javaType="java.util.List"
+                    ofType="org.lc.admin.common.entities.entity.SystemRole"/>
+    </resultMap>
+
+    <!--  系统角色结果集映射  -->
+    <resultMap id="systemRoleResultMap" type="org.lc.admin.common.entities.entity.SystemRole">
+        <id column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="name" property="roleName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="key" property="roleKey" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="data_scope" property="dataScope" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  系统部门结果集映射  -->
+    <resultMap id="systemDeptResultMap" type="org.lc.admin.common.entities.entity.SystemDept">
+        <id column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="name" property="deptName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="ancestors" property="ancestors" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="leader" property="leader" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!-- 查询系统用户实体字段（角色，部门等信息）   -->
+    <sql id="selectAuthUser">
+        SELECT DISTINCTROW su.user_id,
+                           su.dept_id,
+                           su.user_name,
+                           su.nick_name,
+                           su.email,
+                           su.avatar,
+                           su.phone_number,
+                           su.PASSWORD   AS `password`,
+                           su.sex,
+                           su.STATUS     AS `status`,
+                           su.salt,
+                           su.del_flag,
+                           su.login_ip,
+                           su.login_time,
+                           su.create_by,
+                           su.create_time,
+                           su.remark,
+                           sd.dept_id,
+                           sd.parent_id  AS dept_parent_id,
+                           sd.ancestors  AS dept_ancestors,
+                           sd.dept_name,
+                           sd.order_num  AS dept_order_num,
+                           sd.leader     AS dept_leader,
+                           sd.STATUS     AS `dept_status`,
+                           sr.role_id,
+                           sr.role_name,
+                           sr.role_key,
+                           sr.order_num  AS role_order_num,
+                           sr.data_scope AS role_data_scope,
+                           sr.STATUS     AS `role_status`
+        FROM system_user su
+                 LEFT JOIN system_dept sd ON su.dept_id = sd.dept_id
+                 LEFT JOIN system_user_role sur ON su.user_id = sur.user_id
+                 LEFT JOIN system_role sr ON sr.role_id = sur.role_id
+    </sql>
+
+    <!--  根据用户名查询认证用户数据  -->
+    <select id="selectAuthUserByUsername" resultMap="authUserResultMap">
+        <include refid="selectAuthUser"/>
+        WHERE su.user_name = #{userName} AND su.del_flag = 0
+    </select>
+
+</mapper>

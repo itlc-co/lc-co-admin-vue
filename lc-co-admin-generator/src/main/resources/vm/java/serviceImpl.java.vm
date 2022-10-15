@@ -1,0 +1,220 @@
+package ${packageName}.service.impl;
+
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ObjectUtil;
+import ${packageName}.entities.entity.${ClassName};
+import ${packageName}.entities.bo.${ClassName}Bo;
+import ${packageName}.entities.request.${ClassName}Request;
+import org.lc.admin.common.excel.utils.ExcelUtils;
+import org.lc.admin.common.exec.FileException;
+import org.lc.admin.common.pool.UserConstantsPool;
+import ${packageName}.exec.${ClassName}Exception;
+import org.lc.admin.common.utils.system.SecurityUtils;
+import ${packageName}.mapper.${ClassName}Mapper;
+import ${packageName}.service.${ClassName}Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Description: ${functionName}service服务实现
+ *
+ * @author ${author}
+ * @version 1.0.0
+ * @date ${dateTime}
+ */
+@Service
+public class ${ClassName}ServiceImpl implements  ${ClassName}Service {
+
+    public static final Logger log = LoggerFactory.getLogger(${ClassName}ServiceImpl.class);
+
+    @Resource
+    private ${ClassName}Mapper ${className}Mapper;
+
+    /**
+     * Description: 根据请求参数查询${functionName}列表数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link ${ClassName} } ${functionName}列表数据
+     * @date 2022-10-14 11:19
+     */
+    @Override
+    public List<${ClassName}> select${ClassName}List(${ClassName}Request requestParam){
+        return ${className}Mapper.select${ClassName}List(requestParam);
+    }
+
+    /**
+     * Description: 根据${functionName}主键查询${functionName}数据
+     *
+     * @param ${pkColumn.javaField}  ${functionName}主键
+     * @return {@link ${ClassName} } ${functionName}数据
+     * @date ${dateTime}
+     */
+    @Override
+    public ${ClassName} select${ClassName}By${pkColumn.fieldAlias}(${pkColumn.javaType} ${pkColumn.javaField}){
+        return ${className}Mapper.select${ClassName}By${pkColumn.fieldAlias}(${pkColumn.javaField});
+    }
+
+    /**
+     * Description: 根据请求参数添加${functionName}数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link Integer } 记录数
+     * @date ${dateTime}
+     */
+    @Override
+    public Integer add${ClassName}(${ClassName}Request requestParam){
+        // 唯一性检查自行补充
+
+        // 根据请求参数插入${functionName}
+        return insert${ClassName}(requestParam);
+    }
+
+    /**
+     * Description: 根据请求参数插入${functionName}数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link Integer } 记录数
+     * @date ${dateTime}
+     */
+    @Override
+    public Integer insert${ClassName}(${ClassName}Request requestParam) {
+        // bean转换 ${functionName}请求参数转换为${functionName}
+        ${ClassName} ${className} = BeanUtil.toBean(requestParam, ${ClassName}.class);
+
+        // 根据${functionName}数据插入${functionName}数据并返回记录数
+        Integer row = insert${ClassName}(${className});
+
+        return row;
+     }
+
+    /**
+    * Description: 根据${functionName}数据插入${functionName}数据
+    *
+    * @param ${className} ${functionName}数据
+    * @return {@link Integer } 记录数
+    * @date 2022-09-20 20:27
+    */
+    @Override
+    public Integer insert${ClassName}(${ClassName} ${className}) {
+        // 设置创建、修改者
+        String userName = StrUtil.blankToDefault(SecurityUtils.getUserName(),UserConstantsPool.DEFAULT_AUTH_USER_NAME);
+        ${className}.setCreateBy(userName);
+        ${className}.setUpdateBy(userName);
+        return ${className}Mapper.insert${ClassName}(${className});
+    }
+
+
+    /**
+    * Description: 根据请求参数编辑${functionName}数据
+    *
+    * @param requestParam 请求参数
+    * @return {@link Integer } 记录数
+    * @date ${dateTime}
+    */
+    @Override
+    public Integer edit${ClassName}(${ClassName}Request requestParam) {
+        // 唯一性检查自行补充
+
+        // 根据请求参数更新${functionName}数据
+        return update${ClassName}(requestParam);
+    }
+
+    /**
+     * Description: 根据请求参数更新${functionName}数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link Integer } 记录数
+     * @date ${dateTime}
+     */
+    @Override
+    public Integer update${ClassName}(${ClassName}Request requestParam) {
+        // bean转换 ${functionName}请求参数转换为${functionName}
+        ${ClassName} ${className} = BeanUtil.toBean(requestParam, ${ClassName}.class);
+        #set($pkField=$pkColumn.javaField.substring(0,1).toUpperCase() + $pkColumn.javaField.substring(1))
+        // 设置主键字段防止空指针
+        ${className}.set${pkColumn.fieldAlias}(ObjectUtil.defaultIfNull(requestParam.get${pkColumn.fieldAlias}(), requestParam.get${pkField}()));
+
+        // 根据${functionName}数据更新${functionName}数据并返回记录数
+        Integer row = update${ClassName}(${className});
+
+        return row;
+    }
+
+    /**
+     * Description: 根据${functionName}数据更新${functionName}数据
+     *
+     * @param ${className} ${functionName}数据
+     * @return {@link Integer } 记录数
+     * @date ${dateTime}
+     */
+    @Override
+    public Integer update${ClassName}(${ClassName} ${className}) {
+        // 设置修改者
+        String userName = StrUtil.blankToDefault(SecurityUtils.getUserName(),UserConstantsPool.DEFAULT_AUTH_USER_NAME);
+        ${className}.setUpdateBy(userName);
+        return ${className}Mapper.update${ClassName}(${className});
+    }
+
+    /**
+     * Description: 根据请求参数查询${functionName}bo列表数据
+     *
+     * @param requestParam 请求参数
+     * @return {@link List }<{@link ${ClassName}Bo }> ${functionName}bo列表数据
+     * @date ${dateTime}
+     */
+    @Override
+    public List<${ClassName}Bo> select${ClassName}BoList(${ClassName}Request requestParam) {
+        return ${className}Mapper.select${ClassName}BoList(requestParam);
+    }
+
+    /**
+     * Description: 根据请求参数导出${functionName}列表数据
+     *
+     * @param requestParam 请求参数
+     * @param response     响应
+     * @throws IOException io异常
+     * @date ${dateTime}
+     */
+    @Override
+    public void export(${ClassName}Request requestParam, HttpServletResponse response) throws IOException {
+        ExcelUtils.exportExcel(response, select${ClassName}BoList(requestParam), ${ClassName}Bo.class, "${functionName}信息");
+    }
+
+    /**
+     * Description: 根据${functionName}主键删除${functionName}数据
+     *
+     * @param ${pkColumn.javaField} ${functionName}主键
+     * @return {@link Integer } 记录数
+     * @date 2022-10-06 21:54
+     */
+    @Override
+    public Integer delete${ClassName}By${pkColumn.fieldAlias}(${pkColumn.javaType} ${pkColumn.javaField}) {
+        // 根据${functionName}主键删除${functionName}数据
+        Integer row = ${className}Mapper.delete${ClassName}By${pkColumn.fieldAlias}(${pkColumn.javaField});
+        return row;
+    }
+
+    /**
+    * Description: 根据${functionName}主键列表删除${functionName}列表数据
+    *
+    * @param ${pkColumn.javaField}s ${functionName}主键列表
+    * @return {@link Integer } 记录数
+    * @date 2022-10-06 21:54
+    */
+    @Override
+    public Integer delete${ClassName}By${pkColumn.fieldAlias}s(List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
+        // 根据${functionName}主键列表删除${functionName}列表数据
+        Integer row = ${className}Mapper.delete${ClassName}By${pkColumn.fieldAlias}s(${pkColumn.javaField}s);
+        return row;
+    }
+
+}

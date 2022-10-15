@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.system.mapper.SystemUserMapper">
+
+    <!--  系统用户结果集映射  -->
+    <resultMap id="systemUserResultMap" type="org.lc.admin.common.entities.entity.SystemUser">
+        <id column="user_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="dept_id" property="deptId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="user_type" property="userType" jdbcType="CHAR" javaType="java.lang.String"/>
+        <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="sex" property="sex" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="password" property="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
+        <result column="login_ip" property="loginIp" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="salt" property="salt" jdbcType="CHAR" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!-- 系统用户Vo结果集映射   -->
+    <resultMap id="systemUserVoResultMap" type="org.lc.admin.system.entities.response.SystemUserResponse"
+               extends="systemUserResultMap">
+        <result column="dept_name" property="deptName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <collection column="role_names" property="roleNames" ofType="java.lang.String" javaType="java.util.Set">
+            <id column="role_names"/>
+        </collection>
+    </resultMap>
+
+    <!--  系统用户Bo结果集映射  -->
+    <resultMap id="systemUserBoResultMap" type="org.lc.admin.system.entities.bo.SystemUserBo">
+        <id column="user_id" property="userId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="sex" property="sex" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="login_ip" property="loginIp" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <association columnPrefix="dept_" property="dept" javaType="org.lc.admin.system.entities.bo.SystemDeptBo">
+            <id column="id" property="deptId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <result column="status" property="deptStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+            <result column="name" property="deptName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="leader" property="leader" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="phone" property="phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        </association>
+        <collection columnPrefix="role_" property="roles" javaType="java.util.List"
+                    ofType="org.lc.admin.system.entities.bo.SystemRoleBo">
+            <id column="id" property="roleId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <result column="name" property="roleName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="key" property="roleKey" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="status" property="roleStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+            <result column="data_scope" property="dataScope" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        </collection>
+        <collection columnPrefix="post_" property="posts" javaType="java.util.List"
+                    ofType="org.lc.admin.system.entities.bo.SystemPostBo">
+            <id column="id" property="postId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <result column="name" property="postName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="code" property="postCode" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="status" property="postStatus" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        </collection>
+    </resultMap>
+
+    <!-- 查询系统用户字段（不包括角色，部门等信息）   -->
+    <sql id="selectSystemUser">
+        SELECT DISTINCT su.user_id,
+                        su.dept_id,
+                        su.user_name,
+                        su.nick_name,
+                        su.email,
+                        su.avatar,
+                        su.phone_number,
+                        su.PASSWORD `password`,
+                        su.sex,
+                        su.STATUS,
+                        su.del_flag,
+                        su.login_ip,
+                        su.login_time,
+                        su.create_by,
+                        su.create_time,
+                        su.remark
+        FROM system_user su
+        WHERE su.del_flag = 0
+    </sql>
+
+    <!-- 查询系统用户Vo字段（包括角色，部门等信息）   -->
+    <sql id="selectSystemUserVo">
+        SELECT DISTINCTROW su.user_id, su.dept_id,
+               su.user_name,
+               su.nick_name,
+               su.email,
+               su.avatar,
+               su.phone_number,
+               su.sex,
+               su.STATUS `status`,
+               su.create_by,
+               su.create_time,
+               su.update_by,
+               su.update_time,
+               su.remark,
+               sd.dept_name,
+               (
+                   SELECT DISTINCTROW
+                              GROUP_CONCAT( sr.role_name SEPARATOR ',' )
+                   FROM system_role sr
+                            LEFT JOIN system_user_role sur ON sur.role_id = sr.role_id
+                   WHERE sur.user_id = su.user_id
+                     AND sr.del_flag = 0
+                     AND sr.`STATUS` = 0
+                   GROUP BY su.user_id
+                   ORDER BY sr.order_num ASC
+               ) AS      role_names
+        FROM system_user su
+                 LEFT JOIN system_dept sd ON su.dept_id = sd.dept_id
+    </sql>
+
+    <!--  查询系统用户Bo字段  -->
+    <sql id="selectSystemUserBo">
+        SELECT DISTINCTROW su.user_id, su.user_name,
+               su.nick_name,
+               su.email,
+               su.phone_number,
+               su.sex,
+               su.STATUS,
+               su.login_ip,
+               su.login_time,
+               su.remark,
+               sd.dept_id,
+               sd.dept_name,
+               sd.leader     dept_leader,
+               sd.`status`   dept_status,
+               sd.email      dept_email,
+               sd.phone      dept_phone,
+               sr.role_id,
+               sr.role_key,
+               sr.role_name,
+               sr.data_scope role_data_scope,
+               sr.`status`   role_status,
+               sp.post_id,
+               sp.post_name,
+               sp.post_code,
+               sp.`status`   post_status
+        FROM system_user su
+                 LEFT JOIN system_user_role sur ON sur.user_id = su.user_id
+                 LEFT JOIN system_user_post sup ON sup.user_id = su.user_id
+                 LEFT JOIN system_role sr ON sr.role_id = sur.role_id
+                 LEFT JOIN system_post sp ON sp.post_id = sup.post_id
+                 LEFT JOIN system_dept sd ON sd.dept_id = su.dept_id
+    </sql>
+
+    <!--  插入用户数据  -->
+    <insert id="insertUser" parameterType="org.lc.admin.common.entities.entity.SystemUser" useGeneratedKeys="true"
+            keyColumn="user_id" keyProperty="id">
+        INSERT INTO system_user (
+        <if test=" id != null and id > 0 ">
+            user_id,
+        </if>
+        <if test=" deptId != null and deptId > 0 ">
+            dept_id,
+        </if>
+        <if test=" userName != null and userName != '' ">
+            user_name,
+        </if>
+        <if test=" nickName != null and nickName != '' ">
+            nick_name,
+        </if>
+        <if test=" sex != null and ( sex == 0 or sex == 1 or sex == 2) ">
+            sex,
+        </if>
+        <if test=" avatar != null and avatar != '' ">
+            avatar,
+        </if>
+        <if test=" password != null and password != '' ">
+            password,
+        </if>
+        <if test=" salt != null and salt != '' ">
+            salt,
+        </if>
+        <if test=" phoneNumber != null and phoneNumber != '' ">
+            phone_number,
+        </if>
+        <if test=" email != null and email != '' ">
+            email,
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            status,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        <if test=" remark != null and remark != '' ">
+            remark,
+        </if>
+        create_time,
+        update_time
+        )
+        VALUES (
+        <if test=" id != null and id > 0 ">
+            #{id},
+        </if>
+        <if test=" deptId != null and deptId > 0 ">
+            #{deptId},
+        </if>
+        <if test=" userName != null and userName != '' ">
+            #{userName},
+        </if>
+        <if test=" nickName != null and nickName != '' ">
+            #{nickName},
+        </if>
+        <if test=" sex != null and ( sex == 0 or sex == 1 or sex == 2) ">
+            #{sex},
+        </if>
+        <if test=" avatar != null and avatar != '' ">
+            #{avatar},
+        </if>
+        <if test=" password != null and password != '' ">
+            #{password},
+        </if>
+        <if test=" salt != null and salt != '' ">
+            #{salt},
+        </if>
+        <if test=" phoneNumber != null and phoneNumber != '' ">
+            #{phoneNumber},
+        </if>
+        <if test=" email != null and email != '' ">
+            #{email},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        NOW(),
+        NOW())
+    </insert>
+
+    <!--  更新用户数据  -->
+    <update id="updateUser" parameterType="org.lc.admin.common.entities.entity.SystemUser" useGeneratedKeys="true"
+            keyColumn="user_id" keyProperty="id">
+        UPDATE system_user
+        <set>
+            <if test="deptId != null and deptId > 0">dept_id = #{deptId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
+            <if test="sex != null and ( sex == 0 or sex == 1) ">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="salt != null and salt != ''">salt = #{salt},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="status != null and ( status == 0  or status == 1) ">status = #{status},</if>
+            <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginTime != null">login_time = #{loginTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = NOW()
+        </set>
+        WHERE user_id = #{id}
+    </update>
+
+    <!--  重置用户密码数据  -->
+    <update id="resetUserPwd">
+        UPDATE system_user
+        SET password = #{password},
+            salt     = #{salt}
+        WHERE user_name = #{userName}
+    </update>
+
+    <!--  更新用户头像数据  -->
+    <update id="updateUserAvatar">
+        UPDATE system_user
+        SET avatar = #{avatar}
+        WHERE user_name = #{userName}
+    </update>
+
+    <!--  根据用户数据记录登录信息  -->
+    <update id="recordLoginInfo" parameterType="org.lc.admin.common.entities.entity.SystemUser">
+        UPDATE system_user
+        SET login_ip   = #{loginIp},
+            login_time = #{loginTime}
+        WHERE user_id = #{id}
+    </update>
+
+    <!--  根据用户id列表删除用户数据  -->
+    <delete id="deleteUserByIds">
+        UPDATE system_user SET del_flag = 1 WHERE user_id IN
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <!--  根据用户id删除用户数据  -->
+    <delete id="deleteUserById">
+        UPDATE system_user
+        SET del_flag = 1
+        WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 查询用户列表数据   -->
+    <select id="selectUserList" resultMap="systemUserVoResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemUserRequest">
+        <include refid="selectSystemUserVo"/>
+        <where>
+            su.del_flag = 0
+            <if test="userId != null and userId != 0">
+                AND su.user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND su.user_name like CONCAT('%',#{userName},'%')
+            </if>
+            <if test="status != null and ( status == 0  or status == 1)">
+                AND su.status = #{status}
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                AND su.phone_number like concat('%', #{phoneNumber}, '%')
+            </if>
+            <if test="deptId != null and deptId > 0">
+                AND ( su.dept_id = #{deptId} OR su.dept_id in (SELECT sd.dept_id FROM system_dept sd WHERE
+                FIND_IN_SET(#{deptId},sd.ancestors)))
+            </if>
+            <if test="params.startTime!=null and params.startTime != ''">
+                <!-- 开始时间检索 -->
+                AND DATE_FORMAT(su.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+            </if>
+            <if test="params.endTime!=null and params.endTime != ''">
+                <!-- 结束时间检索 -->
+                AND DATE_FORMAT(su.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="params.dataScope != null and params.dataScope != '' ">
+                <!-- 数据范围过滤 -->
+                ${params.dataScope}
+            </if>
+        </where>
+    </select>
+
+    <!--   根据用户id查询用户数据   -->
+    <select id="selectUserByUserId" resultMap="systemUserResultMap">
+        <include refid="selectSystemUser"/>
+        AND su.user_id = #{userId}
+    </select>
+
+    <!--  根据用户名称查询用户数量  -->
+    <select id="selectCntUserByUserName" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM system_user
+        WHERE user_name = #{userName}
+          and del_flag = 0 limit 1
+    </select>
+
+
+    <!--  通过用户手机号码查询用户数量  -->
+    <select id="selectCntUserByPhoneNumber" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM system_user
+        WHERE phone_number = #{phoneNumber}
+          and del_flag = 0 limit 1
+    </select>
+
+
+    <!--  通过用户邮箱查询用户数量  -->
+    <select id="selectCntUserByEmail" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM system_user
+        WHERE email = #{email}
+          and del_flag = 0 limit 1
+    </select>
+
+    <!-- 查询用户Bo列表数据   -->
+    <select id="selectUserBos" resultMap="systemUserBoResultMap">
+        <include refid="selectSystemUserBo"/>
+        <where>
+            su.del_flag = 0
+            AND sr.del_flag = 0
+            AND sd.del_flag = 0
+            <if test="userName != null and userName != ''">
+                AND su.user_name like CONCAT('%',#{userName},'%')
+            </if>
+            <if test="status != null and ( status == 0  or status == 1)">
+                AND su.status = #{status}
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                AND su.phone_number like concat('%', #{phoneNumber}, '%')
+            </if>
+            <if test="deptId != null and deptId > 0">
+                AND ( su.dept_id = #{deptId} OR su.dept_id in (SELECT sd.dept_id FROM system_dept sd WHERE
+                FIND_IN_SET(#{deptId},sd.ancestors)))
+            </if>
+            <if test="params.startTime!=null and params.startTime != ''">
+                <!-- 开始时间检索 -->
+                AND DATE_FORMAT(su.create_time,'%y%m%d') &gt;= DATE_FORMAT(#{params.startTime},'%y%m%d')
+            </if>
+            <if test="params.endTime!=null and params.endTime != ''">
+                <!-- 结束时间检索 -->
+                AND DATE_FORMAT(su.create_time,'%y%m%d') &lt;= DATE_FORMAT(#{params.endTime},'%y%m%d')
+            </if>
+            <if test=" params.dataScope != null and params.dataScope != '' ">
+                <!-- 数据范围过滤  -->
+                ${params.dataScope}
+            </if>
+        </where>
+        ORDER BY sd.order_num,
+        sr.order_num,
+        sp.order_num ASC
+    </select>
+
+    <!--  根据部门id查询用户数量  -->
+    <select id="selectCntUserByDeptId" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM system_user
+        WHERE dept_id = #{deptId}
+          AND del_flag = 0
+    </select>
+
+    <!--  查询已分配角色的用户列表数据  -->
+    <select id="selectAllocatedUserList" resultMap="systemUserResultMap">
+        SELECT
+        DISTINCTROW
+        su.user_id,
+        su.user_name,
+        su.dept_id,
+        su.nick_name,
+        su.email,
+        su.phone_number,
+        su.`status`,
+        su.create_time
+        FROM
+        system_user su
+        LEFT JOIN system_user_role sur ON sur.user_id = su.user_id
+        LEFT JOIN system_role sr ON sr.role_id = sur.role_id
+        LEFT JOIN system_dept sd ON sd.dept_id = su.dept_id
+        <where>
+            su.del_flag = 0
+            AND sr.role_id = #{roleId}
+            <if test="userName != null and userName != ''">
+                AND su.user_name LIKE CONCAT( '%', #{userName}, '%' )
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                AND su.phone_number LIKE CONCAT( '%', #{phoneNumber}, '%' )
+            </if>
+            <if test=" params.dataScope != null and params.dataScope != '' ">
+                <!-- 数据范围过滤  -->
+                ${params.dataScope}
+            </if>
+        </where>
+    </select>
+
+    <!--  查询未分配角色的用户列表数据  -->
+    <select id="selectUnallocatedUserList" resultMap="systemUserResultMap"
+            parameterType="org.lc.admin.system.entities.request.SystemUserRequest">
+        SELECT DISTINCTROW su.user_id, su.user_name,
+        su.dept_id,
+        su.nick_name,
+        su.email,
+        su.phone_number,
+        su.`status`,
+        su.create_time
+        FROM system_user su
+        LEFT JOIN system_user_role sur ON sur.user_id = su.user_id
+        LEFT JOIN system_role sr ON sr.role_id = sur.role_id
+        LEFT JOIN system_dept sd ON sd.dept_id = su.dept_id
+        <where>
+            su.del_flag = 0
+            AND (sr.role_id != #{roleId} OR sr.role_id IS NULL)
+            AND (su.user_id NOT IN (SELECT su.user_id FROM system_user su INNER JOIN system_user_role sur ON sur.user_id
+            = su.user_id AND sur.role_id = #{roleId}))
+            <if test="userName != null and userName != ''">
+                AND su.user_name LIKE CONCAT( '%', #{userName}, '%' )
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                AND su.phone_number LIKE CONCAT( '%', #{phoneNumber}, '%' )
+            </if>
+            <if test=" params.dataScope != null and params.dataScope != '' ">
+                <!-- 数据范围过滤  -->
+                ${params.dataScope}
+            </if>
+        </where>
+    </select>
+
+    <!--  根据邮箱查询用户数据  -->
+    <select id="selectUserByEmail" resultMap="systemUserResultMap" parameterType="java.lang.String">
+        SELECT DISTINCT su.email,
+                        su.user_id
+        FROM system_user su
+        WHERE su.del_flag = 0
+          AND su.email = #{email} LIMIT 1
+    </select>
+
+    <!--  根据用户手机号码查询用户数据  -->
+    <select id="selectUserByPhoneNumber" resultMap="systemUserResultMap" parameterType="java.lang.String">
+        SELECT DISTINCT su.phone_number,
+                        su.user_id
+        FROM system_user su
+        WHERE su.del_flag = 0
+          AND su.phone_number = #{phoneNumber} LIMIT 1
+    </select>
+
+    <!--  根据用户名称查询用户数据  -->
+    <select id="selectUserByUserName" resultMap="systemUserResultMap" parameterType="java.lang.String">
+        SELECT DISTINCT su.user_name,
+                        su.user_id
+        FROM system_user su
+        WHERE su.del_flag = 0
+          AND su.user_name = #{userName} LIMIT 1
+    </select>
+
+</mapper>

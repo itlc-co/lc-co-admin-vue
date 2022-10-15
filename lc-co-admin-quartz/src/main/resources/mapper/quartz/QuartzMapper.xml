@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lc.admin.quartz.mapper.QuartzJobMapper">
+
+    <!--  任务结果集映射  -->
+    <resultMap id="quartzJobResultMap" type="org.lc.admin.quartz.entities.entity.QuartzJob">
+        <id column="job_id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_group" property="jobGroup" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_invoke_target" property="jobInvokeTarget" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_invoke_params" property="jobInvokeParams" jdbcType="BLOB" javaType="java.lang.String"/>
+        <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="misfire_policy" property="misfirePolicy" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_concurrent" property="isConcurrent" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"
+                typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!--  任务bo结果集映射  -->
+    <resultMap id="quartzJobBoResultMap" type="org.lc.admin.quartz.entities.bo.QuartzJobBo">
+        <id column="job_id" property="jobId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_group" property="jobGroup" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_invoke_target" property="jobInvokeTarget" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="job_invoke_params" property="jobInvokeParams" jdbcType="BLOB" javaType="java.lang.String"/>
+        <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="misfire_policy" property="misfirePolicy" jdbcType="CHAR" javaType="java.lang.Character"/>
+        <result column="is_concurrent" property="isConcurrent" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!--  查询任务字段  -->
+    <sql id="selectQuartzJob">
+        SELECT job_id,
+               job_name,
+               job_group,
+               job_invoke_target,
+               job_invoke_params,
+               cron_expression,
+               misfire_policy,
+               is_concurrent,
+               `status`,
+               create_by,
+               update_by,
+               create_time,
+               update_time,
+               remark
+        FROM quartz_job qj
+    </sql>
+
+    <!--  查询任务bo字段  -->
+    <sql id="selectQuartzJobBo">
+        SELECT job_id,
+               job_name,
+               job_group,
+               job_invoke_target,
+               job_invoke_params,
+               cron_expression,
+               misfire_policy,
+               is_concurrent,
+               `status`
+        FROM quartz_job qj
+    </sql>
+
+
+    <!--  根据任务数据插入任务数据  -->
+    <insert id="insertQuartzJob" keyColumn="job_id" useGeneratedKeys="true" keyProperty="id"
+            parameterType="org.lc.admin.quartz.entities.entity.QuartzJob">
+        INSERT INTO quartz_job (
+        <if test=" id != null and id > 0 ">
+            job_id,
+        </if>
+        <if test=" jobName != null and jobName != '' ">
+            job_name,
+        </if>
+        <if test=" jobGroup != null and jobGroup != '' ">
+            job_group,
+        </if>
+        <if test=" jobInvokeTarget != null and jobInvokeTarget != '' ">
+            job_invoke_target,
+        </if>
+        <if test=" jobInvokeParams != null and jobInvokeParams != '' ">
+            job_invoke_params,
+        </if>
+        <if test=" cronExpression != null and cronExpression != '' ">
+            cron_expression,
+        </if>
+        <if test=" misfirePolicy != null and misfirePolicy != '' ">
+            misfire_policy,
+        </if>
+        <if test=" isConcurrent != null and ( isConcurrent == 0 or isConcurrent == 1 ) ">
+            is_concurrent,
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            status,
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            create_by,
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            update_by,
+        </if>
+        <if test=" remark != null and remark != '' ">
+            remark,
+        </if>
+        create_time,
+        update_time)
+        VALUES (
+        <if test=" id != null and id > 0 ">
+            #{id},
+        </if>
+        <if test=" jobName != null and jobName != '' ">
+            #{jobName},
+        </if>
+        <if test=" jobGroup != null and jobGroup != '' ">
+            #{jobGroup},
+        </if>
+        <if test=" jobInvokeTarget != null and jobInvokeTarget != '' ">
+            #{jobInvokeTarget},
+        </if>
+        <if test=" jobInvokeParams != null and jobInvokeParams != '' ">
+            #{jobInvokeParams},
+        </if>
+        <if test=" cronExpression != null and cronExpression != '' ">
+            #{cronExpression},
+        </if>
+        <if test=" misfirePolicy != null and misfirePolicy != '' ">
+            #{misfirePolicy},
+        </if>
+        <if test=" isConcurrent != null and ( isConcurrent == 0 or isConcurrent == 1 ) ">
+            #{isConcurrent},
+        </if>
+        <if test=" status != null and ( status == 0 or status == 1 ) ">
+            #{status},
+        </if>
+        <if test=" createBy != null and createBy != '' ">
+            #{createBy},
+        </if>
+        <if test=" updateBy != null and updateBy != '' ">
+            #{updateBy},
+        </if>
+        <if test=" remark != null and remark != '' ">
+            #{remark},
+        </if>
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!--  根据任务数据修改任务数据  -->
+    <update id="updateQuartzJob" keyColumn="job_id" useGeneratedKeys="true" keyProperty="id"
+            parameterType="org.lc.admin.quartz.entities.entity.QuartzJob">
+        UPDATE quartz_job
+        <set>
+            <if test=" jobName != null and jobName != '' ">
+                job_name = #{jobName},
+            </if>
+            <if test=" jobGroup != null and jobGroup != '' ">
+                job_group = #{jobGroup},
+            </if>
+            <if test=" jobInvokeTarget != null and jobInvokeTarget != '' ">
+                job_invoke_target = #{jobInvokeTarget},
+            </if>
+            <if test=" jobInvokeParams != null and jobInvokeParams != '' ">
+                job_invoke_params = #{jobInvokeParams},
+            </if>
+            <if test=" cronExpression != null and cronExpression != '' ">
+                cron_expression = #{cronExpression},
+            </if>
+            <if test=" misfirePolicy != null and misfirePolicy != '' ">
+                misfire_policy = #{misfirePolicy},
+            </if>
+            <if test=" isConcurrent != null  and ( isConcurrent == 0 or isConcurrent == 1 ) ">
+                is_concurrent = #{isConcurrent},
+            </if>
+            <if test=" status != null and ( status == 0 or status == 1 ) ">
+                status = #{status},
+            </if>
+            <if test=" updateBy != null and updateBy != '' ">
+                update_by = #{updateBy},
+            </if>
+            update_time = now()
+        </set>
+        WHERE job_id = #{id}
+    </update>
+
+    <!--  根据任务id列表删除任务列表数据  -->
+    <delete id="deleteQuartzJobByIds">
+        DELETE FROM quartz_job WHERE job_id IN
+        <foreach collection="jobIds" index="index" item="jobId" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </delete>
+
+    <!--  根据任务id删除任务列表数据  -->
+    <delete id="deleteQuartzJobById">
+        DELETE
+        FROM quartz_job
+        WHERE job_id = #{jobId}
+    </delete>
+
+    <!--  根据任务id查询任务数据  -->
+    <select id="selectQuartzJobById" resultMap="quartzJobResultMap" parameterType="java.lang.Long">
+        <include refid="selectQuartzJob"/>
+        WHERE job_id = #{jobId}
+    </select>
+
+    <!--  根据任务请求参数查询任务数据列表  -->
+    <select id="selectQuartzJobList" resultMap="quartzJobResultMap">
+        <include refid="selectQuartzJob"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" jobName != null and jobName != '' ">
+                    AND job_name LIKE CONCAT('%',#{jobName},'%')
+                </if>
+                <if test="jobGroup != null and jobGroup != ''">
+                    AND job_group = #{jobGroup}
+                </if>
+                <if test="status != null and ( status == 0 or status == 1 ) ">
+                    AND status = #{status}
+                </if>
+                <if test="jobInvokeTarget != null and jobInvokeTarget != ''">
+                    AND job_invoke_target LIKE CONCAT('%', #{jobInvokeTarget}, '%')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!--  根据任务id列表查询任务列表数据  -->
+    <select id="selectQuartzJobListByIds" resultMap="quartzJobResultMap">
+        <include refid="selectQuartzJob"/>
+        WHERE job_id IN
+        <foreach collection="jobIds" index="index" item="jobId" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </select>
+
+    <!--  根据请求参数查询任务bo列表数据  -->
+    <select id="selectQuartzJobBoList" resultMap="quartzJobBoResultMap">
+        <include refid="selectQuartzJobBo"/>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test=" jobName != null and jobName != '' ">
+                    AND job_name LIKE CONCAT('%',#{jobName},'%')
+                </if>
+                <if test="jobGroup != null and jobGroup != ''">
+                    AND job_group = #{jobGroup}
+                </if>
+                <if test="status != null and ( status == 0 or status == 1 ) ">
+                    AND status = #{status}
+                </if>
+                <if test="jobInvokeTarget != null and jobInvokeTarget != ''">
+                    AND job_invoke_target LIKE CONCAT('%', #{jobInvokeTarget}, '%')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!-- 根据任务名称与任务组名查询任务数据   -->
+    <select id="selectQuartzJobByNameAndGroup" resultMap="quartzJobResultMap">
+        <include refid="selectQuartzJob"/>
+        WHERE job_name = #{jobName} AND job_group = #{jobGroup}
+    </select>
+
+</mapper>
