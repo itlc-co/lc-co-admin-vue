@@ -2,7 +2,8 @@
 
 ## 系统简介
 
-**admin是完全开源的通用的项目快速开发平台，支持高度自定义化满足绝大部分的功能，代码侵入较少，易扩展第三方组件库。**
+**admin是完全开源的通用的前后端分离的项目快速开发平台，前端基于若依框架进行二次开发，后端采用SpringBoot系列框架独立开发，支持高度自定义化满足绝大部分的功能，代码侵入较少，易扩展第三方组件库。**
+
 
 - 前端技术栈
 
@@ -59,3 +60,6 @@
 ![login-demo](https://lc-co-bucket.oss-cn-shenzhen.aliyuncs.com/items-images/lc-co-admin-vue-images/readme-images/login-demo.png)
 
 ![system-demo](https://lc-co-bucket.oss-cn-shenzhen.aliyuncs.com/items-images/lc-co-admin-vue-images/readme-images/system-demo.png)
+
+## 鸣谢
+感谢若依框架[若依](http://120.79.202.7/)提供前端模板
